@@ -22,7 +22,7 @@ class NetworkService {
     private val mapper = jacksonObjectMapper()
     private var ticketList: List<Ticket> = emptyList()
 
-    fun getTickets(): List<Ticket> {
+    fun getTickets(): String /*List<Ticket>*/ {
 
         val url = getUrl.toHttpUrl().newBuilder()
             .addQueryParameter("symbol", "AAPL")
@@ -50,7 +50,7 @@ class NetworkService {
         // Jackson from json to List
 //        pictureList = mapper.readValue(response, object : TypeReference<List<Picture>>() {})
 
-        return ticketList
+        return response
     }
 
     companion object {

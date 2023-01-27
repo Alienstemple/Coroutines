@@ -11,12 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.data.Ticket
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.service.NetworkService
+import com.example.coroutines.vm.TicketsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var ticketAdapter: TicketsAdapter
+
+    private val ticketsViewModel: TicketsViewModel by viewModels()
 
     private var ticketList: List<Ticket> = emptyList()
 
@@ -28,8 +34,17 @@ class MainActivity : AppCompatActivity() {
         mainBinding.getBtn.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "coro launched")
-                NetworkService().getTickets()
+                val testData = NetworkService().getTickets()
+                withContext(Dispatchers.Main) {
+                    // Update view model
+                    ticketsViewModel.testData.value = testData
+                    Log.d(TAG, "LiveData updated")
+                }
             }
+
+            ticketsViewModel.testData.observe(this, Observer {
+                mainBinding.textView.text = it
+            })
         }
     }
 
