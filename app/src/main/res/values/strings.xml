@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Coroutines</string>
+    <string name="get">get</string>
+    <string name="ticket_name">ticket name</string>
 </resources>
