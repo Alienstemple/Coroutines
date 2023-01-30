@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coroutines.data.Ticket
+import com.example.coroutines.data.TicketOutput
 import com.example.coroutines.databinding.TicketItemBinding
+import com.squareup.picasso.Picasso
 
-class TicketsAdapter (private val ticketsList: List<Ticket>): RecyclerView.Adapter<TicketsAdapter.ViewHolder>() {
+class TicketsAdapter (private val ticketsList: List<TicketOutput>): RecyclerView.Adapter<TicketsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.d(TAG, "onCreateViewHolder() called with: parent = $parent, viewType = $viewType")
@@ -28,12 +29,15 @@ class TicketsAdapter (private val ticketsList: List<Ticket>): RecyclerView.Adapt
 
         private val ticketItemBinding = TicketItemBinding.bind(view)
 
-        fun bind(ticketItem: Ticket) = with (ticketItemBinding) {
+        fun bind(ticketItem: TicketOutput) = with (ticketItemBinding) {
             Log.d(TAG, "bind() called ${ticketItem.name}")
-            ticketNameTv.text = ticketItem.name
 
-//            Picasso.get().load(pictureItem.url)
-//                .into(img1)
+            ticketNameTv.text = ticketItem.name
+            Picasso.get().load(ticketItem.logo)
+                .into(ticketIcon)
+            cTv.text = ticketItem.c.toString()
+            dTv.text = ticketItem.d.toString()
+            dpTv.text = ticketItem.dp.toString()
         }
     }
 
