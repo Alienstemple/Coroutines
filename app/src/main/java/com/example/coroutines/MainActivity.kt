@@ -8,11 +8,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.data.Quote
-import com.example.coroutines.data.Ticket
-import com.example.coroutines.data.TicketOutput
+import com.example.coroutines.data.Ticker
+import com.example.coroutines.data.TickerOutput
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.service.NetworkService
-import com.example.coroutines.vm.TicketsViewModel
+import com.example.coroutines.vm.TickersViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -20,11 +20,11 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
-    private lateinit var ticketAdapter: TicketsAdapter
+    private lateinit var tickerAdapter: TickersAdapter
 
-    private val ticketsViewModel: TicketsViewModel by viewModels()
+    private val tickersViewModel: TickersViewModel by viewModels()
 
-    private var ticketOutputRecycler: MutableList<TicketOutput> = mutableListOf()
+    private var tickerOutputRecycler: MutableList<TickerOutput> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +35,16 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "coro launched")
                 val testData: String
-                val res1: List<Ticket>
+                val res1: List<Ticker>
                 val res2: List<Quote>
-                val call1 = async { NetworkService().getTickets() }
+                val call1 = async { NetworkService().getTickers() }
                 val call2 = async { NetworkService().getQuotes() }
 
                 res1 = call1.await()
                 res2 = call2.await()
 
                 for (i in res1.indices) {
-                    ticketOutputRecycler.add(TicketOutput(res1[i].logo,
+                    tickerOutputRecycler.add(TickerOutput(res1[i].logo,
                         res1[i].name,
                         res2[i].c,
                         res2[i].d,
@@ -55,28 +55,28 @@ class MainActivity : AppCompatActivity() {
 //
                 withContext(Dispatchers.Main) {
                     // Update view model
-                    ticketsViewModel.testData.value = ticketOutputRecycler
+                    tickersViewModel.testData.value = tickerOutputRecycler
                     Log.d(TAG, "LiveData updated")
                 }
             }
 
-            ticketsViewModel.testData.observe(this, Observer {
-                ticketAdapter = TicketsAdapter(it)
-                Log.d(TAG, "Tickets: ${it.toString()}")
+            tickersViewModel.testData.observe(this, Observer {
+                tickerAdapter = TickersAdapter(it)
+                Log.d(TAG, "Tickers: ${it.toString()}")
 
-                mainBinding.ticketsRecycler.layoutManager =
+                mainBinding.tickersRecycler.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                mainBinding.ticketsRecycler.adapter = ticketAdapter
+                mainBinding.tickersRecycler.adapter = tickerAdapter
             })
         }
     }
 
-    private fun updateTicketRecycler() {
-        ticketAdapter = TicketsAdapter(ticketOutputRecycler)
+    private fun updateTickerRecycler() {
+        tickerAdapter = TickersAdapter(tickerOutputRecycler)
 
-        mainBinding.ticketsRecycler.layoutManager =
+        mainBinding.tickersRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        mainBinding.ticketsRecycler.adapter = ticketAdapter
+        mainBinding.tickersRecycler.adapter = tickerAdapter
     }
 
     companion object {

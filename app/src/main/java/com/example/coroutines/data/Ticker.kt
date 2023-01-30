@@ -1,6 +1,6 @@
 package com.example.coroutines.data
 
-data class Ticket(
+data class Ticker(
     val country: String,
     val currency: String,
     val exchange: String,

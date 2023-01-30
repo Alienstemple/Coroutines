@@ -2,8 +2,8 @@ package com.example.coroutines.service
 
 import android.util.Log
 import com.example.coroutines.data.Quote
-import com.example.coroutines.data.Ticket
-import com.example.coroutines.data.TicketQuery
+import com.example.coroutines.data.Ticker
+import com.example.coroutines.data.TickerQuery
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -24,13 +24,13 @@ class NetworkService {
         .build()
 
     private val mapper = jacksonObjectMapper()
-    private var ticketList: MutableList<Ticket> = mutableListOf()
+    private var tickerList: MutableList<Ticker> = mutableListOf()
     private var quoteList: MutableList<Quote> = mutableListOf()
-    private var ticketQueryList: List<TicketQuery> = initTicketQueryList()
+    private var tickerQueryList: List<TickerQuery> = initTickerQueryList()
 
-    fun getTickets(): List<Ticket> {
+    fun getTickers(): List<Ticker> {
 
-        ticketQueryList.forEach {
+        tickerQueryList.forEach {
             val url = getCompanyUrl.toHttpUrl().newBuilder()
                 .addQueryParameter("symbol", it.Symbol)
                 .addQueryParameter("token", API_KEY)
@@ -54,16 +54,16 @@ class NetworkService {
 
             Log.d(TAG, "$response")
 
-            // Jackson from json to Ticket
-            ticketList.add(mapper.readValue(response, object : TypeReference<Ticket>() {}))
+            // Jackson from json to Ticker
+            tickerList.add(mapper.readValue(response, object : TypeReference<Ticker>() {}))
         }
 
-        return ticketList
+        return tickerList
     }
 
     fun getQuotes(): List<Quote> {
 
-        ticketQueryList.forEach {
+        tickerQueryList.forEach {
             val url = getQuoteUrl.toHttpUrl().newBuilder()
                 .addQueryParameter("symbol", it.Symbol)
                 .addQueryParameter("token", API_KEY)
@@ -87,18 +87,18 @@ class NetworkService {
 
             Log.d(TAG, "$response")
 
-            // Jackson from json to Ticket
+            // Jackson from json to Ticker
             quoteList.add(mapper.readValue(response, object : TypeReference<Quote>() {}))
         }
 
         return quoteList
     }
 
-    private fun initTicketQueryList(): List<TicketQuery> {
-        //        val ticketQueriesJson = File("./s_p_tickers.json").readText(Charsets.UTF_8)  // FIXME ENOENT file not found! Even on device!
+    private fun initTickerQueryList(): List<TickerQuery> {
+        //        val tickerQueriesJson = File("./s_p_tickers.json").readText(Charsets.UTF_8)  // FIXME ENOENT file not found! Even on device!
         // TODO add File
 
-        val ticketQueriesJson = """
+        val tickerQueriesJson = """
 [
   {
     "Name": "3M Company",
@@ -122,10 +122,10 @@ class NetworkService {
   }]
         """
 
-        Log.d(TAG, "Json string = $ticketQueriesJson")
-        val ticketQuery: List<TicketQuery> = mapper.readValue(ticketQueriesJson)
-        Log.d(TAG, "Result list ${ticketQuery.toString()}")
-        return ticketQuery
+        Log.d(TAG, "Json string = $tickerQueriesJson")
+        val tickerQuery: List<TickerQuery> = mapper.readValue(tickerQueriesJson)
+        Log.d(TAG, "Result list ${tickerQuery.toString()}")
+        return tickerQuery
     }
 
     companion object {

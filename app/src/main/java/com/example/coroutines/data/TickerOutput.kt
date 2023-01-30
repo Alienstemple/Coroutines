@@ -1,6 +1,6 @@
 package com.example.coroutines.data
 
-data class TicketOutput(
+data class TickerOutput(
     val logo: String,
     val name: String,
     val c: Double,
