@@ -1,8 +1,12 @@
 package com.example.coroutines.service
 
 import android.util.Log
+import com.example.coroutines.data.Quote
 import com.example.coroutines.data.Ticket
+import com.example.coroutines.data.TicketQuery
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.CookieJar
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -20,68 +24,108 @@ class NetworkService {
         .build()
 
     private val mapper = jacksonObjectMapper()
-    private var ticketList: List<Ticket> = emptyList()
+    private var ticketList: MutableList<Ticket> = mutableListOf()
+    private var quoteList: MutableList<Quote> = mutableListOf()
+    private var ticketQueryList: List<TicketQuery> = initTicketQueryList()
 
-    fun getTickets(): String /*List<Ticket>*/ {
+    fun getTickets(): List<Ticket> {
 
-        val url = getCompanyUrl.toHttpUrl().newBuilder()
-            .addQueryParameter("symbol", "AAPL")
-            .addQueryParameter("token", API_KEY)
-            .build()
+        ticketQueryList.forEach {
+            val url = getCompanyUrl.toHttpUrl().newBuilder()
+                .addQueryParameter("symbol", it.Symbol)
+                .addQueryParameter("token", API_KEY)
+                .build()
 
-        val request = Request.Builder()
-            .url(url)
-            .build()
+            val request = Request.Builder()
+                .url(url)
+                .build()
 
-        var response: String = try {
-            var resp: Response = httpClient.newCall(request).execute()
-            if (resp.isSuccessful) {
-                resp.body?.string() ?: "No content"
-            } else {
-                "Response code: ${resp.code}"
+            var response: String = try {
+                var resp: Response = httpClient.newCall(request).execute()
+                if (resp.isSuccessful) {
+                    resp.body?.string() ?: "No content"
+                } else {
+                    "Response code: ${resp.code}"
+                }
+            } catch (e: java.lang.Exception) {
+                Log.e(TAG, "Get failed!", e)
+                e.stackTrace.toString()
             }
-        } catch (e: java.lang.Exception) {
-            Log.e(TAG, "Get failed!", e)
-            e.stackTrace.toString()
+
+            Log.d(TAG, "$response")
+
+            // Jackson from json to Ticket
+            ticketList.add(mapper.readValue(response, object : TypeReference<Ticket>() {}))
         }
 
-        Log.d(TAG, "$response")
-
-        // Jackson from json to List
-//        pictureList = mapper.readValue(response, object : TypeReference<List<Picture>>() {})
-
-        return response
+        return ticketList
     }
 
-    fun getQuotes(): String /*List<Ticket>*/ {
+    fun getQuotes(): List<Quote> {
 
-        val url = getQuoteUrl.toHttpUrl().newBuilder()
-            .addQueryParameter("symbol", "AAPL")
-            .addQueryParameter("token", API_KEY)
-            .build()
+        ticketQueryList.forEach {
+            val url = getQuoteUrl.toHttpUrl().newBuilder()
+                .addQueryParameter("symbol", it.Symbol)
+                .addQueryParameter("token", API_KEY)
+                .build()
 
-        val request = Request.Builder()
-            .url(url)
-            .build()
+            val request = Request.Builder()
+                .url(url)
+                .build()
 
-        var response: String = try {
-            var resp: Response = httpClient.newCall(request).execute()
-            if (resp.isSuccessful) {
-                resp.body?.string() ?: "No content"
-            } else {
-                "Response code: ${resp.code}"
+            var response: String = try {
+                var resp: Response = httpClient.newCall(request).execute()
+                if (resp.isSuccessful) {
+                    resp.body?.string() ?: "No content"
+                } else {
+                    "Response code: ${resp.code}"
+                }
+            } catch (e: java.lang.Exception) {
+                Log.e(TAG, "Get failed!", e)
+                e.stackTrace.toString()
             }
-        } catch (e: java.lang.Exception) {
-            Log.e(TAG, "Get failed!", e)
-            e.stackTrace.toString()
+
+            Log.d(TAG, "$response")
+
+            // Jackson from json to Ticket
+            quoteList.add(mapper.readValue(response, object : TypeReference<Quote>() {}))
         }
 
-        Log.d(TAG, "$response")
+        return quoteList
+    }
 
-        // Jackson from json to List
-//        pictureList = mapper.readValue(response, object : TypeReference<List<Picture>>() {})
+    private fun initTicketQueryList(): List<TicketQuery> {
+        //        val ticketQueriesJson = File("./s_p_tickers.json").readText(Charsets.UTF_8)  // FIXME ENOENT file not found! Even on device!
+        // TODO add File
 
-        return response
+        val ticketQueriesJson = """
+[
+  {
+    "Name": "3M Company",
+    "Sector": "Industrials",
+    "Symbol": "MMM"
+  },
+  {
+    "Name": "A.O. Smith Corp",
+    "Sector": "Industrials",
+    "Symbol": "AOS"
+  },
+  {
+    "Name": "Abbott Laboratories",
+    "Sector": "Health Care",
+    "Symbol": "ABT"
+  },
+  {
+    "Name": "AbbVie Inc.",
+    "Sector": "Health Care",
+    "Symbol": "ABBV"
+  }]
+        """
+
+        Log.d(TAG, "Json string = $ticketQueriesJson")
+        val ticketQuery: List<TicketQuery> = mapper.readValue(ticketQueriesJson)
+        Log.d(TAG, "Result list ${ticketQuery.toString()}")
+        return ticketQuery
     }
 
     companion object {

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coroutines.data.Quote
 import com.example.coroutines.data.Ticket
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.service.NetworkService
@@ -15,6 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
@@ -33,21 +36,20 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "coro launched")
                 val testData: String
-                val res1: String
-                val res2: String
+                val res1: List<Ticket>
+                val res2: List<Quote>
                 val call1 = async { NetworkService().getTickets() }
                 val call2 = async { NetworkService().getQuotes() }
 
                 res1 = call1.await()
                 res2 = call2.await()
-                testData = res1 + res2
+                testData = res1.toString() + res2.toString()
 
                 withContext(Dispatchers.Main) {
                     // Update view model
                     ticketsViewModel.testData.value = testData
                     Log.d(TAG, "LiveData updated")
                 }
-
             }
 
             ticketsViewModel.testData.observe(this, Observer {
