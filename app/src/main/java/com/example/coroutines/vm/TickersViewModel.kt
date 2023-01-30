@@ -8,6 +8,7 @@ import com.example.coroutines.MainActivity
 import com.example.coroutines.data.Quote
 import com.example.coroutines.data.Ticker
 import com.example.coroutines.data.TickerOutput
+import com.example.coroutines.repository.NetworkState
 import com.example.coroutines.repository.TickerRepository
 import com.example.coroutines.service.NetworkService
 import com.example.coroutines.service.TickerService
@@ -23,14 +24,23 @@ class TickersViewModel : ViewModel() {
     fun testGetTickersAndQuotes(): String {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(MainActivity.TAG, "coro launched")
-            val res1: List<Ticker>
-            val res2: List<Quote>
+            var res1: MutableList<Ticker?> = mutableListOf()
+            var res2: MutableList<Quote?> = mutableListOf()
             val call1 = async { tickerRepository.getTicker("AAPL") }
             val call2 = async { tickerRepository.getQuote("AAPL") }
-            res1 = call1.await()
-            res2 = call2.await()
-            // merge to one model
-            // TODO tickerList.postValue
+
+            res1 = mutableListOf(call1.await())
+            res2 = mutableListOf(call2.await())
+
+            val list: MutableList<TickerOutput> = mutableListOf()
+            for (i in res1.indices) {
+                res1[i]?.let { it1 ->
+                    res2[i]?.let { it2 ->
+                        list.add(TickerOutput(it1.logo, it1.name, it2.c, it2.d, it2.dp))
+                    }
+                }
+            }
+            tickerList.postValue(list)
         }
         return "OK"
     }

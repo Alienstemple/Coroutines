@@ -6,31 +6,21 @@ import com.example.coroutines.service.TickerService
 
 class TickerRepository(private val retrofitService: TickerService) {
 
-    suspend fun getTicker(ticker: String): NetworkState<Ticker> {
+    suspend fun getTicker(ticker: String): Ticker? {
         val response = retrofitService.getTickers(ticker, API_KEY)
         return if (response.isSuccessful) {
-            val responseBody = response.body()
-            if (responseBody != null) {
-                NetworkState.Success(responseBody)
-            } else {
-                NetworkState.Error(response)
-            }
+            response.body()
         } else {
-            NetworkState.Error(response)
+           throw RuntimeException("GetTicker is unsuccessful")
         }
     }
 
-    suspend fun getQuote(ticker: String): NetworkState<Quote> {
+    suspend fun getQuote(ticker: String): Quote? {
         val response = retrofitService.getQuotes(ticker, API_KEY)
         return if (response.isSuccessful) {
-            val responseBody = response.body()
-            if (responseBody != null) {
-                NetworkState.Success(responseBody)
-            } else {
-                NetworkState.Error(response)
-            }
+            response.body()
         } else {
-            NetworkState.Error(response)
+            throw RuntimeException("GetQuote is unsuccessful")
         }
     }
 
