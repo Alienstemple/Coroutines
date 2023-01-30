@@ -55,12 +55,12 @@ class MainActivity : AppCompatActivity() {
 //
                 withContext(Dispatchers.Main) {
                     // Update view model
-                    tickersViewModel.testData.value = tickerOutputRecycler
+                    tickersViewModel.tickerList.value = tickerOutputRecycler
                     Log.d(TAG, "LiveData updated")
                 }
             }
 
-            tickersViewModel.testData.observe(this, Observer {
+            tickersViewModel.tickerList.observe(this, Observer {
                 tickerAdapter = TickersAdapter(it)
                 Log.d(TAG, "Tickers: ${it.toString()}")
 
@@ -69,14 +69,22 @@ class MainActivity : AppCompatActivity() {
                 mainBinding.tickersRecycler.adapter = tickerAdapter
             })
         }
-    }
 
-    private fun updateTickerRecycler() {
-        tickerAdapter = TickersAdapter(tickerOutputRecycler)
+        mainBinding.getRetrofitBtn.setOnClickListener {
+            tickersViewModel.testGetTickersAndQuotes()  // сделали асинхронный запрос во view model
+            tickersViewModel.tickerList.observe(this, Observer { tickersList ->
+                tickersList?.let {
+                    // Обновляем Recycler View
+                    tickerAdapter = TickersAdapter(it)
+                    Log.d(TAG, "Tickers: ${it.toString()}")
 
-        mainBinding.tickersRecycler.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        mainBinding.tickersRecycler.adapter = tickerAdapter
+                    mainBinding.tickersRecycler.layoutManager =
+                        LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                    mainBinding.tickersRecycler.adapter = tickerAdapter
+                }
+
+            })
+        }
     }
 
     companion object {

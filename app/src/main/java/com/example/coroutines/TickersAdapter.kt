@@ -33,7 +33,7 @@ class TickersAdapter (private val tickersList: List<TickerOutput>): RecyclerView
             Log.d(TAG, "bind() called ${tickerItem.name}")
 
             tickerNameTv.text = tickerItem.name
-            Picasso.get().load(tickerItem.logo)
+            Picasso.get().load("https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.svg")  // tickerItem.logo
                 .into(tickerIcon)
             cTv.text = tickerItem.c.toString()
             dTv.text = tickerItem.d.toString()
