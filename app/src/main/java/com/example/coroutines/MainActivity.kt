@@ -1,11 +1,10 @@
 package com.example.coroutines
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.data.Ticket
@@ -13,10 +12,9 @@ import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.service.NetworkService
 import com.example.coroutines.vm.TicketsViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
@@ -34,22 +32,28 @@ class MainActivity : AppCompatActivity() {
         mainBinding.getBtn.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "coro launched")
-                val testData = NetworkService().getTickets()
+                val testData: String
+                val res1: String
+                val res2: String
+                val call1 = async { NetworkService().getTickets() }
+                val call2 = async { NetworkService().getQuotes() }
+
+                res1 = call1.await()
+                res2 = call2.await()
+                testData = res1 + res2
+
                 withContext(Dispatchers.Main) {
                     // Update view model
                     ticketsViewModel.testData.value = testData
                     Log.d(TAG, "LiveData updated")
                 }
+
             }
 
             ticketsViewModel.testData.observe(this, Observer {
                 mainBinding.textView.text = it
             })
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun updateTicketRecycler() {
