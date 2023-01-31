@@ -10,7 +10,9 @@ import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.databinding.TickerItemBinding
 import com.squareup.picasso.Picasso
 
-class TickersAdapter (private val tickersList: List<TickerOutput>): RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
+class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
+
+    private val tickersList = mutableListOf<TickerOutput>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.d(TAG, "onCreateViewHolder() called with: parent = $parent, viewType = $viewType")
@@ -25,6 +27,13 @@ class TickersAdapter (private val tickersList: List<TickerOutput>): RecyclerView
     }
 
     override fun getItemCount() = tickersList.size
+
+    fun setList(newList: List<TickerOutput>) {
+        tickersList.apply {
+            clear()
+            setList(newList)
+        }
+    }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 

@@ -38,7 +38,7 @@ class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
 //        TickerOutput(res1!!.logo, res1.name, res2!!.c, res2.d, res2.dp)  // TODO fix !!
     }
 
-    fun testGetTickersAndQuotes(inputList: List<TickerQuery>) {
+    fun getTickersAndQuotes(inputList: List<TickerQuery>) {
         Log.d(TAG, "Inp list = $inputList")
 
         val time = measureTimeMillis {

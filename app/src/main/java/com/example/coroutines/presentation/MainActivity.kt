@@ -20,28 +20,24 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-        val inputTickers: String = resources.openRawResource(R.raw.s_p_tickers)
-            .bufferedReader().use { it.readText() }
-        Log.d(TAG, "input = $inputTickers")
+        // Init adapter for recycler
+        tickerAdapter = TickersAdapter()
+        mainBinding.tickersRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        mainBinding.tickersRecycler.adapter = tickerAdapter
 
+        // Init observer
+        tickersViewModel.tickerList.observe(this, Observer { tickersList ->
+            tickersList?.let {
+                // Обновляем Recycler View
+                tickerAdapter.setList(it)
+            }
+        })
 
-        // TODO observe, init adapter
+        val inputList = JsonToInputTickersConverter.getInputTickers(this)
 
         mainBinding.getRetrofitBtn.setOnClickListener {
-            val inputList = JsonToInputTickersConverter.getInputTickers(this)
-            tickersViewModel.testGetTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
-            tickersViewModel.tickerList.observe(this, Observer { tickersList ->
-                tickersList?.let {
-                    // Обновляем Recycler View
-                    tickerAdapter = TickersAdapter(it) // TODO pass list
-                    Log.d(TAG, "Tickers: ${it.toString()}")
-
-                    mainBinding.tickersRecycler.layoutManager =
-                        LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                    mainBinding.tickersRecycler.adapter = tickerAdapter
-                }
-
-            })
+            tickersViewModel.getTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
         }
     }
 
