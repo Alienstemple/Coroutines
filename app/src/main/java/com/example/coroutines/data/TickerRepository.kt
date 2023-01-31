@@ -1,11 +1,10 @@
-package com.example.coroutines.repository
+package com.example.coroutines.data
 
 import android.util.Log
-import com.example.coroutines.data.Quote
-import com.example.coroutines.data.Ticker
-import com.example.coroutines.repository.service.TickerService
+import com.example.coroutines.models.Quote
+import com.example.coroutines.models.Ticker
 
-class TickerRepository(private val retrofitService: TickerService) {
+class TickerRepository(private val retrofitService: RetrofitService) {
 
     suspend fun getTicker(ticker: String): Ticker? {
         val response = retrofitService.getTickers(ticker, API_KEY)

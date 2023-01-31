@@ -1,21 +1,16 @@
-package com.example.coroutines.vm
+package com.example.coroutines.presentation
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.coroutines.MainActivity
-import com.example.coroutines.R
-import com.example.coroutines.data.Quote
-import com.example.coroutines.data.Ticker
-import com.example.coroutines.data.TickerOutput
-import com.example.coroutines.data.TickerQuery
-import com.example.coroutines.repository.NetworkState
-import com.example.coroutines.repository.TickerRepository
-import com.example.coroutines.repository.service.NetworkService
-import com.example.coroutines.repository.service.TickerService
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.example.coroutines.models.Quote
+import com.example.coroutines.models.Ticker
+import com.example.coroutines.models.TickerOutput
+import com.example.coroutines.models.TickerQuery
+import com.example.coroutines.data.TickerRepository
+import com.example.coroutines.data.RetrofitService
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
@@ -23,7 +18,7 @@ class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
     ViewModel() {  // TODO  Fabric
     private val _tickerList = MutableLiveData<List<TickerOutput>>()
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
-    private val tickerRepository = TickerRepository(TickerService.getInstance())
+    private val tickerRepository = TickerRepository(RetrofitService.getInstance())
 
     /**
      * Запускаем асинхронно в coroutineScope с пом async {}

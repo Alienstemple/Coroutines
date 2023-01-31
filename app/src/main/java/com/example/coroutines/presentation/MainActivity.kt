@@ -1,4 +1,4 @@
-package com.example.coroutines
+package com.example.coroutines.presentation
 
 import android.os.Bundle
 import android.util.Log
@@ -6,10 +6,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.coroutines.data.TickerOutput
+import com.example.coroutines.R
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.repository.service.JsonToInputTickersConverter
-import com.example.coroutines.vm.TickersViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding

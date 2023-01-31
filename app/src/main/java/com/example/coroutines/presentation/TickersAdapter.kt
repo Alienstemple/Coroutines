@@ -1,11 +1,12 @@
-package com.example.coroutines
+package com.example.coroutines.presentation
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coroutines.data.TickerOutput
+import com.example.coroutines.R
+import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.databinding.TickerItemBinding
 import com.squareup.picasso.Picasso
 

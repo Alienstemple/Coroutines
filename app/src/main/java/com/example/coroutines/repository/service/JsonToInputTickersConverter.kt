@@ -2,7 +2,7 @@ package com.example.coroutines.repository.service
 
 import android.content.Context
 import com.example.coroutines.R
-import com.example.coroutines.data.TickerQuery
+import com.example.coroutines.models.TickerQuery
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 

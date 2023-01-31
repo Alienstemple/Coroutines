@@ -1,4 +1,4 @@
-package com.example.coroutines.data
+package com.example.coroutines.models
 
 data class TickerOutput(
     val logo: String,
