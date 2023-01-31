@@ -9,6 +9,7 @@ import com.example.coroutines.R
 import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.databinding.TickerItemBinding
 import com.squareup.picasso.Picasso
+import java.util.Arrays.setAll
 
 class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
 
@@ -31,7 +32,7 @@ class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
     fun setList(newList: List<TickerOutput>) {
         tickersList.apply {
             clear()
-            setList(newList)
+            addAll(newList)
         }
     }
 

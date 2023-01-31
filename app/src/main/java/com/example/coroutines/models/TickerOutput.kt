@@ -1,9 +1,9 @@
 package com.example.coroutines.models
 
 data class TickerOutput(
-    val logo: String,
-    val name: String,
-    val c: Double,
-    val d: Double,
-    val dp: Double
+    val logo: String = "nan",
+    val name: String = "nan",
+    val c: Double = 0.0,
+    val d: Double = 0.0,
+    val dp: Double = 0.0
 )

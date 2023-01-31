@@ -21,21 +21,25 @@ class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
     private val tickerRepository = TickerRepository(RetrofitService.getInstance())
 
     /**
-     * Запускаем асинхронно в coroutineScope с пом async {}
+     * Запускаем асинхронно в coroutineScope с помощью async {}
      */
-    private suspend fun innerGetTickers(query: TickerQuery)/*: TickerOutput*/ = coroutineScope {
-        var res1: Ticker?
-        var res2: Quote?
+    private suspend fun getTickerAndQuoteFromNetwork(query: TickerQuery): TickerOutput = coroutineScope {
+        val res1: Ticker?
+        val res2: Quote?
         delay(10)
-        val call1 = async { tickerRepository.getTicker(/*"AAPL"*/query.Symbol) }
-        val call2 = async { tickerRepository.getQuote(/*"AAPL"*/query.Symbol) }
+        val call1 = async { tickerRepository.getTicker(query.Symbol) }
+        val call2 = async { tickerRepository.getQuote(query.Symbol) }
 
         res1 = call1.await()
         res2 = call2.await()
         Log.d(TAG, "In innerGetTickets, coro scope")
 
-        // return
-//        TickerOutput(res1!!.logo, res1.name, res2!!.c, res2.d, res2.dp)  // TODO fix !!
+        if (res1 != null && res2 != null)
+            TickerOutput(res1.logo ?: " ", res1.name ?: " ", res2.c ?: 0.0, res2.d ?: 0.0, res2.dp ?: 0.0)  // TODO fix !!
+        else {
+            Log.d(TAG, "Got null resp")
+            TickerOutput(" ", " ", 0.0, 0.0, 0.0)  // default (not valid) values
+        }
     }
 
     fun getTickersAndQuotes(inputList: List<TickerQuery>) {
@@ -45,14 +49,11 @@ class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
             viewModelScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "coro launched")
                 val list: MutableList<TickerOutput> = mutableListOf()
-                // TODO return TickerOutput!
-//                inputList.map {
-//                    async { innerGetTickers(it) }
-//                }.awaitAll()
-                inputList.forEach {  // Последовательно запускаем, чтобы не подумал, что это DDoS
-                    innerGetTickers(it)
-                }
-//            _tickerList.postValue(list)
+                // Асинхронно запускаем для каждого элемента списка запросы в сеть
+                val resultList = inputList.take(30).map {
+                    async { getTickerAndQuoteFromNetwork(it) }
+                }.awaitAll()
+            _tickerList.postValue(resultList)
             }
         }
 
