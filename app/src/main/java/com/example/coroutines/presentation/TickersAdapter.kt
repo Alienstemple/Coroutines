@@ -34,6 +34,7 @@ class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
             clear()
             addAll(newList)
         }
+        notifyDataSetChanged()
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
