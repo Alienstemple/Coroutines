@@ -1,4 +1,4 @@
-package com.example.coroutines.repository
+package com.example.coroutines.data
 
 import retrofit2.Response
 

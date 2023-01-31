@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.R
 import com.example.coroutines.databinding.ActivityMainBinding
-import com.example.coroutines.repository.service.JsonToInputTickersConverter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
