@@ -1,4 +1,4 @@
-package com.example.coroutines.service
+package com.example.coroutines.repository.service
 
 import com.example.coroutines.data.Quote
 import com.example.coroutines.data.Ticker

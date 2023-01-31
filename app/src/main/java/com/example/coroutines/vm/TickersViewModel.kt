@@ -1,100 +1,61 @@
 package com.example.coroutines.vm
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.coroutines.MainActivity
+import com.example.coroutines.R
 import com.example.coroutines.data.Quote
 import com.example.coroutines.data.Ticker
 import com.example.coroutines.data.TickerOutput
+import com.example.coroutines.data.TickerQuery
 import com.example.coroutines.repository.NetworkState
 import com.example.coroutines.repository.TickerRepository
-import com.example.coroutines.service.NetworkService
-import com.example.coroutines.service.TickerService
+import com.example.coroutines.repository.service.NetworkService
+import com.example.coroutines.repository.service.TickerService
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TickersViewModel : ViewModel() {
-    val tickerList = MutableLiveData<List<TickerOutput>>()
-    val tickerRepository = TickerRepository(TickerService.getInstance())
+class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
+    ViewModel() {  // TODO  Fabric
+    private val _tickerList = MutableLiveData<List<TickerOutput>>()
+    val tickerList: LiveData<List<TickerOutput>> = _tickerList
+    private val tickerRepository = TickerRepository(TickerService.getInstance())
 
-    fun testGetTickersAndQuotes(): String {
+    fun testGetTickersAndQuotes(inputList: List<TickerQuery>) {
+        Log.d(TAG, "Inp list = $inputList")
+
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d(MainActivity.TAG, "coro launched")
-            var res1: MutableList<Ticker?> = mutableListOf()
-            var res2: MutableList<Quote?> = mutableListOf()
-            val call1 = async { tickerRepository.getTicker("AAPL") }
-            val call2 = async { tickerRepository.getQuote("AAPL") }
-
-            res1 = mutableListOf(call1.await())
-            res2 = mutableListOf(call2.await())
-
+            Log.d(TAG, "coro launched")
             val list: MutableList<TickerOutput> = mutableListOf()
-            for (i in res1.indices) {
-                res1[i]?.let { it1 ->
-                    res2[i]?.let { it2 ->
-                        list.add(TickerOutput(it1.logo, it1.name, it2.c, it2.d, it2.dp))
-                    }
-                }
-            }
-            tickerList.postValue(list)
-        }
-        return "OK"
-    }
 
-    fun getTickersAndQuotes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.d(MainActivity.TAG, "coro launched")
-            val res1: List<Ticker>
-            val res2: List<Quote>
-            val call1 = async { NetworkService().getTickers() }
-            val call2 = async { NetworkService().getQuotes() }
-
-//            when (val response = tickerRepository.getTicker()) {
-//                is NetworkState.Success -> {
-//                    repoList.postValue(response.data)
-//                }
-//            }
+//            inputList.forEach {  // TODO foreach
+            var res1: Ticker?
+            var res2: Quote?
+            val call1 = async { tickerRepository.getTicker("AAPL"/*it.Symbol*/) }
+            val call2 = async { tickerRepository.getQuote("AAPL"/*it.Symbol*/) }
 
             res1 = call1.await()
             res2 = call2.await()
-//
-//            for (i in res1.indices) {
-//                tickerOutputRecycler.add(TickerOutput(res1[i].logo,
-//                    res1[i].name,
-//                    res2[i].c,
-//                    res2[i].d,
-//                    res2[i].dp))
+
+            // TODO to interactor
+
+            if (res1 != null) {
+                if (res2 != null) {
+                    list.add(TickerOutput(res1.logo, res1.name, res2.c, res2.d, res2.dp))
+                }
+            }
 //            }
-//
-////                testData = res1.toString() + res2.toString()
-////
-//            withContext(Dispatchers.Main) {
-//                // Update view model
-//                tickersViewModel.tickerList.value = tickerOutputRecycler
-//                Log.d(MainActivity.TAG, "LiveData updated")
-//            }
+            _tickerList.postValue(list)
         }
     }
 
-
-    fun getTickerAndQuote(ticker: String) {
-
-        viewModelScope.launch {
-            Log.d("Thread Inside", Thread.currentThread().name)
-//            when (val response = repositoryMain.getUserRepos(userName)) {
-//                is NetworkState.Success -> {
-//                    repoList.postValue(response.data)
-//                }
-//                is NetworkState.Error -> {
-//                    //movieList.postValue(NetworkState.Error())
-//
-//                }
-//            }
-        }
+    companion object {
+        const val TAG = "VMLog"
     }
-
 }

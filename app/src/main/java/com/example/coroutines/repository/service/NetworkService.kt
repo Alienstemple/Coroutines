@@ -1,4 +1,4 @@
-package com.example.coroutines.service
+package com.example.coroutines.repository.service
 
 import android.util.Log
 import com.example.coroutines.data.Quote

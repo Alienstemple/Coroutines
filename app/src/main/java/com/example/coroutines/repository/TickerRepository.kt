@@ -2,7 +2,7 @@ package com.example.coroutines.repository
 
 import com.example.coroutines.data.Quote
 import com.example.coroutines.data.Ticker
-import com.example.coroutines.service.TickerService
+import com.example.coroutines.repository.service.TickerService
 
 class TickerRepository(private val retrofitService: TickerService) {
 
@@ -11,7 +11,7 @@ class TickerRepository(private val retrofitService: TickerService) {
         return if (response.isSuccessful) {
             response.body()
         } else {
-           throw RuntimeException("GetTicker is unsuccessful")
+           throw RuntimeException("GetTicker is unsuccessful. Ticker = $ticker")
         }
     }
 
@@ -20,7 +20,7 @@ class TickerRepository(private val retrofitService: TickerService) {
         return if (response.isSuccessful) {
             response.body()
         } else {
-            throw RuntimeException("GetQuote is unsuccessful")
+            throw RuntimeException("GetQuote is unsuccessful. Ticker = $ticker")
         }
     }
 
