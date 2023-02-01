@@ -1,6 +1,5 @@
 package com.example.coroutines.data
 
-import android.util.Log
 import com.example.coroutines.domain.TickerRepository
 import com.example.coroutines.models.Quote
 import com.example.coroutines.models.Ticker

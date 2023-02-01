@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainBinding.getRetrofitBtn.setOnClickListener {
-//            tickersViewModel.oldGetTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
             tickersViewModel.getTickersAndQuotes(this)
         }
     }
