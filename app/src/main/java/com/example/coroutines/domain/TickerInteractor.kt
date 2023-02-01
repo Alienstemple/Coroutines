@@ -4,5 +4,5 @@ import android.content.Context
 import com.example.coroutines.models.TickerOutput
 
 interface TickerInteractor {
-    fun getTickersAndQuotes(context: Context): List<TickerOutput>
+    suspend fun getTickersAndQuotes(context: Context): List<TickerOutput>
 }

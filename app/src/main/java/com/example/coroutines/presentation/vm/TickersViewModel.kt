@@ -6,13 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.coroutines.data.OldTickerRepository
+import com.example.coroutines.data.RetrofitService
+import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.models.Quote
 import com.example.coroutines.models.Ticker
 import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.models.TickerQuery
-import com.example.coroutines.data.OldTickerRepository
-import com.example.coroutines.data.RetrofitService
-import com.example.coroutines.domain.TickerInteractor
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
@@ -45,8 +45,10 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     }
 
     fun getTickersAndQuotes(context: Context) {
-        val resultList = tickerInteractor.getTickersAndQuotes(context)
-        _tickerList.postValue(resultList)
+        viewModelScope.launch(Dispatchers.IO) {
+            val resultList = tickerInteractor.getTickersAndQuotes(context)
+            _tickerList.postValue(resultList)
+        }
     }
 
     fun oldGetTickersAndQuotes(inputList: List<TickerQuery>) {
