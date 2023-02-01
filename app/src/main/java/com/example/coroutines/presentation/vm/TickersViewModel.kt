@@ -15,7 +15,10 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
 
     fun getTickersAndQuotes(context: Context) {
-        viewModelScope.launch(SupervisorJob() + Dispatchers.IO) {
+        val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+            println("Exception thrown in one of the children. $exception")
+        }
+        viewModelScope.launch(SupervisorJob() + Dispatchers.IO + handler) {
             val resultList = tickerInteractor.getTickersAndQuotes(context)
             _tickerList.postValue(resultList)
         }
