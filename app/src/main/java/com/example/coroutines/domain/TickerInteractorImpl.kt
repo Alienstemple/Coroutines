@@ -2,6 +2,8 @@ package com.example.coroutines.domain
 
 import android.content.Context
 import android.util.Log
+import com.example.coroutines.models.Quote
+import com.example.coroutines.models.Ticker
 import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.presentation.JsonToInputTickersConverter
 import kotlinx.coroutines.async
@@ -10,19 +12,20 @@ import kotlinx.coroutines.coroutineScope
 
 class TickerInteractorImpl(private val tickerRepository: TickerRepository) : TickerInteractor {
 
-    override suspend fun getTickersAndQuotes(context: Context): List<TickerOutput> = coroutineScope {
-        Log.d(TAG, "Test interact method called")
-        val inputList = JsonToInputTickersConverter.getInputTickers(context)
+    override suspend fun getTickersAndQuotes(context: Context): List<TickerOutput> =
+        coroutineScope {
+            Log.d(TAG, "Test interact method called")
+            val inputList = JsonToInputTickersConverter.getInputTickers(context)
 
-        // TODO repo.getTickers(inputList), repo.getQuotes(inputList), merge
-        inputList.take(30).map {
-            async { tickerRepository.testRepo() }
-        }.awaitAll()
+            val outputList: List<Pair<Ticker, Quote>> = inputList.take(30).map {
+                async { tickerRepository.getTickerAndQuote() }
+            }.awaitAll()
 
-        // return from coroutineScope
-        listOf(TickerOutput(" ", "comp1", 0.0, 0.0, 0.0),
-            TickerOutput(" ", "comp2", 0.0, 0.0, 0.0))
-    }
+            outputList.map {
+                TickerOutput(it.first.logo ?: " ", it.first.name ?: " ",
+                    it.second.c ?: 0.0, it.second.d ?: 0.0, it.second.dp ?: 0.0)  // TODO fix elvis !!
+            }
+        }
 
     companion object {
         const val TAG = "InteractLog"
