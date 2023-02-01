@@ -1,4 +1,4 @@
-package com.example.coroutines.presentation
+package com.example.coroutines.presentation.vm
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,11 +11,12 @@ import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.models.TickerQuery
 import com.example.coroutines.data.TickerRepository
 import com.example.coroutines.data.RetrofitService
+import com.example.coroutines.domain.TickerInteractor
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
-class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
-    ViewModel() {  // TODO  Fabric
+class TickersViewModel(private val tickerInteractor: TickerInteractor) :
+    ViewModel() {
     private val _tickerList = MutableLiveData<List<TickerOutput>>()
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
     private val tickerRepository = TickerRepository(RetrofitService.getInstance())
@@ -40,6 +41,10 @@ class TickersViewModel(/*private val tickerRepository: TickerRepository*/) :
             Log.d(TAG, "Got null resp")
             TickerOutput(" ", " ", 0.0, 0.0, 0.0)  // default (not valid) values
         }
+    }
+
+    fun testInteractor() {
+        tickerInteractor.testInteractorMethod()
     }
 
     fun getTickersAndQuotes(inputList: List<TickerQuery>) {

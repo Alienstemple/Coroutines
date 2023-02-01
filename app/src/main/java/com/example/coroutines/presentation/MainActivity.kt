@@ -1,24 +1,30 @@
 package com.example.coroutines.presentation
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.coroutines.R
 import com.example.coroutines.databinding.ActivityMainBinding
+import com.example.coroutines.domain.TickerInteractorImpl
+import com.example.coroutines.presentation.vm.TickerViewModelFactory
+import com.example.coroutines.presentation.vm.TickersViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
-    private val tickersViewModel: TickersViewModel by viewModels()
+    private val tickerInteractor = TickerInteractorImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
+
+        val tickersViewModel: TickersViewModel =
+            ViewModelProvider(this,
+                TickerViewModelFactory(tickerInteractor))[TickersViewModel::class.java]
 
         // Init adapter for recycler
         tickerAdapter = TickersAdapter()
@@ -37,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         val inputList = JsonToInputTickersConverter.getInputTickers(this)
 
         mainBinding.getRetrofitBtn.setOnClickListener {
-            tickersViewModel.getTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
+//            tickersViewModel.getTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
+            tickersViewModel.testInteractor()
         }
     }
 
