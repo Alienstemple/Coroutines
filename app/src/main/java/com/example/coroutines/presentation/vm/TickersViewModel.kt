@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.coroutines.domain.TickerInteractor
-import com.example.coroutines.models.TickerOutput
+import com.example.coroutines.domain.models.TickerOutput
 import kotlinx.coroutines.*
 
 class TickersViewModel(private val tickerInteractor: TickerInteractor) :
