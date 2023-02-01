@@ -15,7 +15,7 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
 
     fun getTickersAndQuotes(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(SupervisorJob() + Dispatchers.IO) {
             val resultList = tickerInteractor.getTickersAndQuotes(context)
             _tickerList.postValue(resultList)
         }
