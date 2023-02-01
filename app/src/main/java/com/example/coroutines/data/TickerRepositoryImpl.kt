@@ -1,18 +1,29 @@
 package com.example.coroutines.data
 
-import android.util.Log
 import com.example.coroutines.domain.TickerRepository
 import com.example.coroutines.models.Quote
 import com.example.coroutines.models.Ticker
+import com.example.coroutines.models.TickerQuery
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 class TickerRepositoryImpl : TickerRepository {
 
-    override suspend fun getTickerAndQuote(): Pair<Ticker, Quote> {
+    private val tickerApi = TickerService(RetrofitService.getInstance())
 
-        // TODO async network call
-        return Ticker("one", "one", "one", "one", "one",
-            "one", 1.0, "one", "one", 1.0,
-        "one", "one") to Quote(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+    override suspend fun getTickerAndQuote(query: TickerQuery): Pair<Ticker, Quote> = coroutineScope {
+        val res1: Ticker
+        val res2: Quote
+        delay(10)
+        val call1 = async { tickerApi.getTicker(query.Symbol) }
+        val call2 = async { tickerApi.getQuote(query.Symbol) }
+
+        res1 = call1.await()
+        res2 = call2.await()
+
+        // return Pair
+        res1 to res2
     }
 
     companion object {
