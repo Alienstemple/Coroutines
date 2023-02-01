@@ -41,11 +41,9 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val inputList = JsonToInputTickersConverter.getInputTickers(this)
-
         mainBinding.getRetrofitBtn.setOnClickListener {
-//            tickersViewModel.getTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
-            tickersViewModel.testInteractor()
+//            tickersViewModel.oldGetTickersAndQuotes(inputList)  // сделали асинхронный запрос во view model
+            tickersViewModel.getTickersAndQuotes(this)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.coroutines.presentation.vm
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +25,7 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     /**
      * Запускаем асинхронно в coroutineScope с помощью async {}
      */
-    private suspend fun getTickerAndQuoteFromNetwork(query: TickerQuery): TickerOutput = coroutineScope {
+    suspend fun getTickerAndQuoteFromNetwork(query: TickerQuery): TickerOutput = coroutineScope {
         val res1: Ticker?
         val res2: Quote?
         delay(10)
@@ -43,11 +44,12 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
         }
     }
 
-    fun testInteractor() {
-        tickerInteractor.testInteractorMethod()
+    fun getTickersAndQuotes(context: Context) {
+        val resultList = tickerInteractor.getTickersAndQuotes(context)
+        _tickerList.postValue(resultList)
     }
 
-    fun getTickersAndQuotes(inputList: List<TickerQuery>) {
+    fun oldGetTickersAndQuotes(inputList: List<TickerQuery>) {
         Log.d(TAG, "Inp list = $inputList")
 
         val time = measureTimeMillis {
