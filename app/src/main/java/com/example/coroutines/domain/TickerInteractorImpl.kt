@@ -2,10 +2,11 @@ package com.example.coroutines.domain
 
 import android.util.Log
 
-class TickerInteractorImpl: TickerInteractor {
+class TickerInteractorImpl(val tickerRepository: TickerRepository): TickerInteractor {
+
     override fun testInteractorMethod() {
         Log.d(TAG, "Test interact method called")
-        // TODO call Repository method
+        tickerRepository.testRepo()
     }
 
     companion object {

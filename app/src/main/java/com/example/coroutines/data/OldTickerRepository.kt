@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.coroutines.models.Quote
 import com.example.coroutines.models.Ticker
 
-class TickerRepository(private val retrofitService: RetrofitService) {
+class OldTickerRepository(private val retrofitService: RetrofitService) {
 
     suspend fun getTicker(ticker: String): Ticker? {
         val response = retrofitService.getTickers(ticker, API_KEY)

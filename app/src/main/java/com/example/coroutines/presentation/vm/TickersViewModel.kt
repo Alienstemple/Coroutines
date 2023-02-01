@@ -9,7 +9,7 @@ import com.example.coroutines.models.Quote
 import com.example.coroutines.models.Ticker
 import com.example.coroutines.models.TickerOutput
 import com.example.coroutines.models.TickerQuery
-import com.example.coroutines.data.TickerRepository
+import com.example.coroutines.data.OldTickerRepository
 import com.example.coroutines.data.RetrofitService
 import com.example.coroutines.domain.TickerInteractor
 import kotlinx.coroutines.*
@@ -19,7 +19,7 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     ViewModel() {
     private val _tickerList = MutableLiveData<List<TickerOutput>>()
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
-    private val tickerRepository = TickerRepository(RetrofitService.getInstance())
+    private val tickerRepository = OldTickerRepository(RetrofitService.getInstance())
 
     /**
      * Запускаем асинхронно в coroutineScope с помощью async {}

@@ -3,9 +3,9 @@ package com.example.coroutines.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coroutines.data.TickerRepositoryImpl
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
@@ -15,12 +15,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
-    private val tickerInteractor = TickerInteractorImpl()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
+
+        val tickerRepository = TickerRepositoryImpl()  // TODO можем ли здесь создать экземпляры?
+        val tickerInteractor = TickerInteractorImpl(tickerRepository)
 
         val tickersViewModel: TickersViewModel =
             ViewModelProvider(this,
