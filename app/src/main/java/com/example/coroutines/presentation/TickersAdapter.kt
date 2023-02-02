@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coroutines.R
-import com.example.coroutines.domain.models.TickerOutput
+import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.databinding.TickerItemBinding
 import com.squareup.picasso.Picasso
 

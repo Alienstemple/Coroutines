@@ -5,7 +5,7 @@ import android.util.Log
 import com.example.coroutines.domain.converters.JsonToInputTickersConverter
 import com.example.coroutines.models.data.QuoteData
 import com.example.coroutines.models.data.TickerData
-import com.example.coroutines.domain.models.TickerOutput
+import com.example.coroutines.models.domain.TickerOutput
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
