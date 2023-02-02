@@ -32,18 +32,21 @@ class TickerDetailsFragment : Fragment() {
 
         setupObserver(tickerDetailsViewModel)
 
+        // TODO where to call view model?
+//        tickerDetailsViewModel.getTickerDetails()
+
         binding.closeBtn.setOnClickListener {
             navigator().hideTickerDetails()
         }
     }
 
     private fun setupObserver(tickerDetailsViewModel: TickerDetailsViewModel) {
-//        tickerDetailsViewModel.tickerList.observe(this) { tickersList ->
-//            tickersList?.let {
-//                // Обновляем Recycler View
-//                tickerAdapter.setList(it)
-//            }
-//        }
+        tickerDetailsViewModel.ticker.observe(viewLifecycleOwner) { tickersList ->
+            tickersList?.let {
+                // Обновим UI - передадим
+                binding.nameTv.text = it.toString()
+            }
+        }
     }
 
     companion object {
