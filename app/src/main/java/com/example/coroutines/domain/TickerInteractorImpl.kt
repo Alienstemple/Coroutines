@@ -17,14 +17,14 @@ class TickerInteractorImpl(private val tickerRepository: TickerRepository) : Tic
             Log.d(TAG, "Test interact method called")
             val inputList = JsonToInputTickersConverter.getInputTickers(context)
 
-            val outputList: List<Pair<Ticker, Quote>> = inputList.take(30).map {     // take first to avoid network error!
+            val outputList: List<Pair<Ticker, Quote>> = inputList.map {     // take first to avoid network error!
                 async { tickerRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
             }.awaitAll()
 
             outputList.map {
                 TickerOutput(it.first.logo ?: " ", it.first.name ?: " ",
                     it.second.c ?: 0.0, it.second.d ?: 0.0, it.second.dp ?: 0.0)  // TODO fix elvis !!
-            }
+            }.filter { it.name != "Default name" && it.name != "" && it.c != 0.0 }
         }
 
     companion object {

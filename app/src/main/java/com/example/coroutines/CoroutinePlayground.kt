@@ -8,18 +8,19 @@ fun main() {
         println("Exception thrown in one of the children. $exception")
     }
 
-    runBlocking {
-        val parentJob = launch(handler) {   // SupervisorJob - не кидаем исключ, но cancel все job-ы
+    val scope = CoroutineScope(Dispatchers.Unconfined).launch(/*SupervisorJob()*/) {
+        supervisorScope {
+            // SupervisorJob - не кидаем исключ, но cancel все job-ы
             // Job A
             val jobA = launch() {
                 val resultA = getResult(1)
                 println("Result A = $resultA")
             }
-            jobA.invokeOnCompletion { throwable ->
-                if (throwable != null) {
-                    println("Error getting result A: $throwable")
-                }
-            }
+//            jobA.invokeOnCompletion { throwable ->
+//                if (throwable != null) {
+//                    println("Error getting result A: $throwable")
+//                }
+//            }
             // Job B
             val jobB = launch(/*SupervisorJob()*/) {
                 val resultB = getResult(2)
@@ -41,14 +42,11 @@ fun main() {
                 }
             }
         }
-        parentJob.invokeOnCompletion { throwable ->
-            if (throwable != null)
-                println("Parent finished with error: $throwable")
-            else
-                println("Parent SUCCESS")
-        }
     }
+
+    Thread.sleep(2000)
 }
+
 
 suspend fun getResult(int: Int): Int {
     delay(int * 500L)
