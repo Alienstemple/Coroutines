@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.R
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
+import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import com.example.coroutines.presentation.vm.TickersViewModel
@@ -20,17 +21,18 @@ class MainActivity : AppCompatActivity(), Navigator {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
+    private val tickerFileService = TickerFileService()
+    private val tickerNetworkService = TickerNetworkService(RetrofitService.getInstance())
+
+    private val tickerRepository = TickerNetworkRepositoryImpl(tickerNetworkService)
+    private val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
+    private val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
-
-        val tickerFileService = TickerFileService()
-        val tickerNetworkService = TickerNetworkService(RetrofitService.getInstance())
-
-        val tickerRepository = TickerNetworkRepositoryImpl(tickerNetworkService)
-        val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
-        val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
 
         val tickersViewModel: TickersViewModel =
             ViewModelProvider(this,
@@ -78,6 +80,8 @@ class MainActivity : AppCompatActivity(), Navigator {
         removeFragment(TickerDetailsFragment())
     }
 
+    override fun getTickerInteractor(): TickerInteractor = tickerInteractor
+
     private fun launchFragment(fragment: Fragment) {
         Log.d(TAG, "Transact with name ${fragment::class.java.simpleName}")
         supportFragmentManager.beginTransaction()
@@ -88,6 +92,7 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     private fun removeFragment(fragment: Fragment) {
         Log.d(TAG, "Remove frag called")
-        supportFragmentManager.popBackStack(fragment::class.java.simpleName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(fragment::class.java.simpleName,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 }
