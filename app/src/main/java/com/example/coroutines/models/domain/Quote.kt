@@ -1,4 +1,4 @@
-package com.example.coroutines.models
+package com.example.coroutines.models.domain
 
 data class Quote(
     val c: Double,

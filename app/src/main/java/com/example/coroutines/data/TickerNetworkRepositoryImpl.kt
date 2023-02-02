@@ -1,19 +1,19 @@
 package com.example.coroutines.data
 
 import com.example.coroutines.domain.TickerRepository
-import com.example.coroutines.models.Quote
-import com.example.coroutines.models.Ticker
-import com.example.coroutines.models.TickerQuery
+import com.example.coroutines.models.data.QuoteData
+import com.example.coroutines.models.data.TickerData
+import com.example.coroutines.models.data.TickerQueryData
 import kotlinx.coroutines.*
 
-class TickerRepositoryImpl : TickerRepository {
+class TickerNetworkRepositoryImpl : TickerRepository {
 
-    private val tickerApi = TickerService(RetrofitService.getInstance())
+    private val tickerApi = TickerNetworkService(RetrofitService.getInstance())
 
-    override suspend fun getTickerAndQuote(query: TickerQuery): Pair<Ticker, Quote> =
+    override suspend fun getTickerAndQuote(query: TickerQueryData): Pair<TickerData, QuoteData> =
         coroutineScope {
-            val res1: Ticker
-            val res2: Quote
+            val res1: TickerData
+            val res2: QuoteData
 
 //            val call1 = async { kotlin.runCatching { tickerApi.getTicker(query.Symbol)} }
 //            val call2 = async { kotlin.runCatching { tickerApi.getQuote(query.Symbol)} }

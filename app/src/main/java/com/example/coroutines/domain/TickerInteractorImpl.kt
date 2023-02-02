@@ -3,8 +3,8 @@ package com.example.coroutines.domain
 import android.content.Context
 import android.util.Log
 import com.example.coroutines.domain.converters.JsonToInputTickersConverter
-import com.example.coroutines.models.Quote
-import com.example.coroutines.models.Ticker
+import com.example.coroutines.models.data.QuoteData
+import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.domain.models.TickerOutput
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -17,7 +17,7 @@ class TickerInteractorImpl(private val tickerRepository: TickerRepository) : Tic
             Log.d(TAG, "Test interact method called")
             val inputList = JsonToInputTickersConverter.getInputTickers(context)
 
-            val outputList: List<Pair<Ticker, Quote>> = inputList.map {     // take first to avoid network error!
+            val outputList: List<Pair<TickerData, QuoteData>> = inputList.map {     // take first to avoid network error!
                 async { tickerRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
             }.awaitAll()
 

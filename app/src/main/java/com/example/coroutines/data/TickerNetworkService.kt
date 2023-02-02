@@ -1,12 +1,12 @@
 package com.example.coroutines.data
 
 import android.util.Log
-import com.example.coroutines.models.Quote
-import com.example.coroutines.models.Ticker
+import com.example.coroutines.models.data.QuoteData
+import com.example.coroutines.models.data.TickerData
 
-class TickerService(private val retrofitService: RetrofitService) {
+class TickerNetworkService(private val retrofitService: RetrofitService) {
 
-    suspend fun getTicker(ticker: String): Ticker {
+    suspend fun getTicker(ticker: String): TickerData {
         return try {
             val response = retrofitService.getTickers(ticker, API_KEY)
 
@@ -17,12 +17,12 @@ class TickerService(private val retrofitService: RetrofitService) {
             }
         } catch (e: java.lang.Exception) {
             Log.d(TAG, "${e.message}")
-            Ticker("", "", "", "", "",
+            TickerData("", "", "", "", "",
                 "", 0.0, "Default name", "", 0.0, "Default Ticker", "")
         }
     }
 
-    suspend fun getQuote(ticker: String): Quote {
+    suspend fun getQuote(ticker: String): QuoteData {
         return try {
             val response = retrofitService.getQuotes(ticker, API_KEY)
 
@@ -33,7 +33,7 @@ class TickerService(private val retrofitService: RetrofitService) {
             }
         } catch (e: java.lang.Exception) {
             Log.d(TAG, "${e.message}")
-            Quote(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            QuoteData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         }
     }
 

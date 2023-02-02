@@ -1,6 +1,6 @@
-package com.example.coroutines.models
+package com.example.coroutines.models.data
 
-data class Ticker(
+data class TickerData(
     val country: String,
     val currency: String,
     val exchange: String,
