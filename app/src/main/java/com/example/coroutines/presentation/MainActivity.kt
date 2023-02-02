@@ -28,22 +28,30 @@ class MainActivity : AppCompatActivity() {
                 TickerViewModelFactory(tickerInteractor))[TickersViewModel::class.java]
 
         // Init adapter for recycler
-        tickerAdapter = TickersAdapter()
-        mainBinding.tickersRecycler.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        mainBinding.tickersRecycler.adapter = tickerAdapter
+        initAdapter()
 
         // Init observer
+        setupObserver(tickersViewModel)
+
+        mainBinding.getRetrofitBtn.setOnClickListener {
+            tickersViewModel.getTickersAndQuotes(this.applicationContext)
+        }
+    }
+
+    private fun setupObserver(tickersViewModel: TickersViewModel) {
         tickersViewModel.tickerList.observe(this, Observer { tickersList ->
             tickersList?.let {
                 // Обновляем Recycler View
                 tickerAdapter.setList(it)
             }
         })
+    }
 
-        mainBinding.getRetrofitBtn.setOnClickListener {
-            tickersViewModel.getTickersAndQuotes(this)
-        }
+    private fun initAdapter() {
+        tickerAdapter = TickersAdapter()
+        mainBinding.tickersRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        mainBinding.tickersRecycler.adapter = tickerAdapter
     }
 
     companion object {
