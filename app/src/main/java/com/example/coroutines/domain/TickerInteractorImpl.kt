@@ -2,7 +2,6 @@ package com.example.coroutines.domain
 
 import android.content.Context
 import android.util.Log
-import com.example.coroutines.domain.converters.JsonToInputTickersConverter
 import com.example.coroutines.models.data.QuoteData
 import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.domain.TickerOutput
