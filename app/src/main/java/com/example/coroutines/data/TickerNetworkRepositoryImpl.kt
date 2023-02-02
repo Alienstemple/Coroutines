@@ -1,14 +1,18 @@
 package com.example.coroutines.data
 
-import com.example.coroutines.domain.TickerRepository
+import com.example.coroutines.data.converters.QuoteConverter
+import com.example.coroutines.data.converters.TickerConverter
+import com.example.coroutines.domain.TickerNetworkRepository
 import com.example.coroutines.models.data.QuoteData
 import com.example.coroutines.models.data.TickerData
-import com.example.coroutines.models.data.TickerQueryData
+import com.example.coroutines.models.domain.Quote
+import com.example.coroutines.models.domain.Ticker
+import com.example.coroutines.models.domain.TickerQuery
 import kotlinx.coroutines.*
 
-class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) : TickerRepository {
+class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) : TickerNetworkRepository {
 
-    override suspend fun getTickerAndQuote(query: TickerQueryData): Pair<TickerData, QuoteData> =
+    override suspend fun getTickerAndQuote(query: TickerQuery): Pair<Ticker, Quote> =
         coroutineScope {
             val res1: TickerData
             val res2: QuoteData
@@ -34,10 +38,8 @@ class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) :
             res1 = call1.await()
             res2 = call2.await()
 
-
-
             // return Pair
-            res1 to res2
+            TickerConverter.convert(res1) to QuoteConverter.convert(res2)
         }
     // TODO try runCatching and .onSuccess { Log.d(TAG, "OK") }
     //                .onFailure { Log.d(TAG, "Catched exception") }
