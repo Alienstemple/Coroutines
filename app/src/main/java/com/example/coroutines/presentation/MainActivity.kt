@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coroutines.data.TickerFileRepositoryImpl
+import com.example.coroutines.data.TickerFileService
 import com.example.coroutines.data.TickerNetworkRepositoryImpl
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractorImpl
@@ -20,8 +22,12 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
+        val tickerFileService = TickerFileService()
+        // TODO add network service
+
         val tickerRepository = TickerNetworkRepositoryImpl()  // TODO можем ли здесь создать экземпляры?
-        val tickerInteractor = TickerInteractorImpl(tickerRepository)
+        val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
+        val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
 
         val tickersViewModel: TickersViewModel =
             ViewModelProvider(this,

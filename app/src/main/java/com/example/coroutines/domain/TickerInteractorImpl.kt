@@ -10,12 +10,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-class TickerInteractorImpl(private val tickerRepository: TickerRepository) : TickerInteractor {
+class TickerInteractorImpl(private val tickerRepository: TickerRepository, private val tickerFileRepository: TickerFileRepository) : TickerInteractor {
 
     override suspend fun getTickersAndQuotes(context: Context): List<TickerOutput> =
         coroutineScope {
             Log.d(TAG, "Test interact method called")
-            val inputList = JsonToInputTickersConverter.getInputTickers(context)
+            val inputList = tickerFileRepository.getInputTickers(context)
 
             val outputList: List<Pair<TickerData, QuoteData>> = inputList.map {     // take first to avoid network error!
                 async { tickerRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
