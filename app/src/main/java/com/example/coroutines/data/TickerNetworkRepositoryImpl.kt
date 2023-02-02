@@ -6,9 +6,7 @@ import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.data.TickerQueryData
 import kotlinx.coroutines.*
 
-class TickerNetworkRepositoryImpl : TickerRepository {
-
-    private val tickerApi = TickerNetworkService(RetrofitService.getInstance())
+class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) : TickerRepository {
 
     override suspend fun getTickerAndQuote(query: TickerQueryData): Pair<TickerData, QuoteData> =
         coroutineScope {

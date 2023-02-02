@@ -2,12 +2,9 @@ package com.example.coroutines.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.coroutines.data.TickerFileRepositoryImpl
-import com.example.coroutines.data.TickerFileService
-import com.example.coroutines.data.TickerNetworkRepositoryImpl
+import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
@@ -23,9 +20,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         val tickerFileService = TickerFileService()
-        // TODO add network service
+        val tickerNetworkService = TickerNetworkService(RetrofitService.getInstance())
 
-        val tickerRepository = TickerNetworkRepositoryImpl()  // TODO можем ли здесь создать экземпляры?
+        val tickerRepository = TickerNetworkRepositoryImpl(tickerNetworkService)
         val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
         val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
 
@@ -45,12 +42,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObserver(tickersViewModel: TickersViewModel) {
-        tickersViewModel.tickerList.observe(this, Observer { tickersList ->
+        tickersViewModel.tickerList.observe(this) { tickersList ->
             tickersList?.let {
                 // Обновляем Recycler View
                 tickerAdapter.setList(it)
             }
-        })
+        }
     }
 
     private fun initAdapter() {
