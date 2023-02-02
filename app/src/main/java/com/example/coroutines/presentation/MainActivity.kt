@@ -4,6 +4,8 @@ import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -14,10 +16,11 @@ import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.domain.TickerInteractorImpl
+import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import com.example.coroutines.presentation.vm.TickersViewModel
 
-class MainActivity : AppCompatActivity(), Navigator {
+class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
@@ -45,8 +48,8 @@ class MainActivity : AppCompatActivity(), Navigator {
         setupObserver(tickersViewModel)
 
         mainBinding.getRetrofitBtn.setOnClickListener {
-            showTickerDetails()
-//            tickersViewModel.getTickersAndQuotes(this.applicationContext)
+//            showTickerDetails()
+            tickersViewModel.getTickersAndQuotes(this.applicationContext)
         }
     }
 
@@ -60,7 +63,7 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     private fun initAdapter() {
-        tickerAdapter = TickersAdapter()
+        tickerAdapter = TickersAdapter(this)
         mainBinding.tickersRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         mainBinding.tickersRecycler.adapter = tickerAdapter
@@ -70,7 +73,8 @@ class MainActivity : AppCompatActivity(), Navigator {
         const val TAG = "MainActLog"
     }
 
-    override fun showTickerDetails() {
+    override fun showTickerDetails(tickerOutput: TickerOutput) {
+        Log.d(TAG, "Item Clicked, in showTickerDetails, ticker = ${tickerOutput.name}")
         mainBinding.detailsFragContainer.visibility = View.VISIBLE
         launchFragment(TickerDetailsFragment.newInstance())
     }
@@ -94,5 +98,9 @@ class MainActivity : AppCompatActivity(), Navigator {
         Log.d(TAG, "Remove frag called")
         supportFragmentManager.popBackStack(fragment::class.java.simpleName,
             FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    override fun onItemClicked(tickerOutput: TickerOutput) {
+        showTickerDetails(tickerOutput)
     }
 }

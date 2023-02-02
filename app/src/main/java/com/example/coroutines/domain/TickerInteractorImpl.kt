@@ -18,7 +18,7 @@ class TickerInteractorImpl(private val tickerNetworkRepository: TickerNetworkRep
             Log.d(TAG, "Test interact method called")
             val inputList = tickerFileRepository.getInputTickers(context)
 
-            val outputList: List<Pair<Ticker, Quote>> = inputList.map {     // take first to avoid network error!
+            val outputList: List<Pair<Ticker, Quote>> = inputList.take(10).map {     // take first to avoid network error!
                 async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
             }.awaitAll()
 

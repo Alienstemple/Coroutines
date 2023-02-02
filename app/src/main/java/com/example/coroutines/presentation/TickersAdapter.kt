@@ -4,13 +4,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coroutines.R
 import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.databinding.TickerItemBinding
 import com.squareup.picasso.Picasso
 
-class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
+class TickersAdapter(val itemClickListener: MyItemClickListener): RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
 
     private val tickersList = mutableListOf<TickerOutput>()
 
@@ -23,7 +25,7 @@ class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(tickersList[position])
+        holder.bind(tickersList[position], itemClickListener)
     }
 
     override fun getItemCount() = tickersList.size
@@ -40,7 +42,7 @@ class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
 
         private val tickerItemBinding = TickerItemBinding.bind(view)
 
-        fun bind(tickerItem: TickerOutput) = with (tickerItemBinding) {
+        fun bind(tickerItem: TickerOutput, clickListener: MyItemClickListener) = with (tickerItemBinding) {
             Log.d(TAG, "bind() called ${tickerItem.name}")
 
             tickerNameTv.text = tickerItem.name
@@ -49,6 +51,10 @@ class TickersAdapter: RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
             cTv.text = tickerItem.c.toString()
             dTv.text = tickerItem.d.toString()
             dpTv.text = tickerItem.dp.toString()
+
+            itemView.setOnClickListener {
+                clickListener.onItemClicked(tickerItem)
+            }
         }
     }
 
