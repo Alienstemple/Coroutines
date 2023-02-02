@@ -1,16 +1,22 @@
 package com.example.coroutines.presentation
 
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coroutines.R
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import com.example.coroutines.presentation.vm.TickersViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Navigator {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
@@ -37,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         setupObserver(tickersViewModel)
 
         mainBinding.getRetrofitBtn.setOnClickListener {
-            tickersViewModel.getTickersAndQuotes(this.applicationContext)
+            showTickerDetails()
+//            tickersViewModel.getTickersAndQuotes(this.applicationContext)
         }
     }
 
@@ -59,5 +66,28 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "MainActLog"
+    }
+
+    override fun showTickerDetails() {
+        mainBinding.detailsFragContainer.visibility = View.VISIBLE
+        launchFragment(TickerDetailsFragment.newInstance())
+    }
+
+    override fun hideTickerDetails() {
+        mainBinding.detailsFragContainer.visibility = View.GONE
+        removeFragment(TickerDetailsFragment())
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        Log.d(TAG, "Transact with name ${fragment::class.java.simpleName}")
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.details_frag_container, fragment)
+            .addToBackStack(fragment::class.java.simpleName)
+            .commit()
+    }
+
+    private fun removeFragment(fragment: Fragment) {
+        Log.d(TAG, "Remove frag called")
+        supportFragmentManager.popBackStack(fragment::class.java.simpleName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 }
