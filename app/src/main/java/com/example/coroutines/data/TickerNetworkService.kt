@@ -7,7 +7,7 @@ import com.example.coroutines.models.data.TickerData
 class TickerNetworkService(private val retrofitService: RetrofitService) {
 
     suspend fun getTicker(ticker: String): TickerData? {
-        return try {  // TODO rm
+//        return try {  // TODO rm
             val response = retrofitService.getTickers(ticker, API_KEY)
 
             if (response.isSuccessful && response.body() != null) {
@@ -15,16 +15,16 @@ class TickerNetworkService(private val retrofitService: RetrofitService) {
                 val resp: TickerData = response.body()!!  // TODO check if fields are null
                 checkFieldsNotNull(resp)
 
-                response.body()!!  // TODO How to avoid
+                return response.body()!!  // TODO How to avoid
             } else { // TODO оставим
                 throw RuntimeException("ERROR GetTicket is unsuccessful. Ticker = $ticker")
             }
-        } catch (e: java.lang.Exception) {
-            Log.d(TAG, "${e.message}")
-            null
-//            TickerData("", "", "", "", "",
-//                "", 0.0, "Default name", "", 0.0, "Default Ticker", "")
-        }
+//        } catch (e: java.lang.Exception) {
+//            Log.d(TAG, "${e.message}")
+//            null
+////            TickerData("", "", "", "", "",
+////                "", 0.0, "Default name", "", 0.0, "Default Ticker", "")
+//        }
     }
 
     private fun checkFieldsNotNull(resp: TickerData) {
@@ -33,7 +33,7 @@ class TickerNetworkService(private val retrofitService: RetrofitService) {
     }
 
     suspend fun getQuote(ticker: String): QuoteData? {
-        return try {
+//        return try {
             val response = retrofitService.getQuotes(ticker, API_KEY)
             val resp: QuoteData
 
@@ -43,11 +43,11 @@ class TickerNetworkService(private val retrofitService: RetrofitService) {
             } else {
                 throw RuntimeException("ERROR GetQuote is unsuccessful. Ticker = $ticker")
             }
-        } catch (e: java.lang.Exception) {
-            Log.d(TAG, "${e.message}")
-            null
-//            QuoteData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        }
+//        } catch (e: java.lang.Exception) {
+//            Log.d(TAG, "${e.message}")
+//            null
+////            QuoteData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+//        }
     }
 
     companion object {

@@ -22,9 +22,15 @@ class TickerInteractorImpl(
             Log.d(TAG, "Test interact method called")
             val inputList = tickerFileRepository.getInputTickers(context)
 
-            val outputList = inputList/*.take(10)*/.map {     // take first to avoid network error!
+            val outputList = inputList.map {     // take first to avoid network error!
                 async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
-            }.mapNotNull { kotlin.runCatching { it.await() }.getOrNull()}  // mapNotNull должен здесь сработать, runcatching еще нет, т к ловим там исключ
+            }.mapNotNull {
+                Log.d(TAG, "Map not null called")
+                kotlin.runCatching {
+                    Log.d(TAG, "RunCatching called. ${it}")
+                    it.await()
+                }.getOrNull()
+            }
 
             outputList.map {
                 TickerOutput(it.first?.logo ?: " ",
@@ -32,7 +38,7 @@ class TickerInteractorImpl(
                     it.second?.c ?: 0.0,
                     it.second?.d ?: 0.0,
                     it.second?.dp ?: 0.0)  // TODO fix elvis !!
-            }/*.filter { it.name != "Default name" && it.name != "" && it.c != 0.0 }*/
+            }
         }
 
     override suspend fun getTickerDetails(tickerOutput: TickerOutput): Ticker {
