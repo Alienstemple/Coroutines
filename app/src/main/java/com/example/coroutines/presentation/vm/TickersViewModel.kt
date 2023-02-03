@@ -1,6 +1,7 @@
 package com.example.coroutines.presentation.vm
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,9 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     fun getTickersAndQuotes(context: Context) {
         val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
             println("Exception thrown in one of the children. $exception")
+            Toast.makeText(context,
+                "Exception thrown in one of the children. $exception",
+                Toast.LENGTH_SHORT).show()
         }
         viewModelScope.launch(SupervisorJob() + Dispatchers.IO + handler) {
             val resultList = tickerInteractor.getTickersAndQuotes(context)

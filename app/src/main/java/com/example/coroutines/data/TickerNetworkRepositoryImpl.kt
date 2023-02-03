@@ -26,7 +26,7 @@ class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) :
             res2 = kotlin.runCatching { call2.await()}.getOrNull()
         }
 
-        if (res1 == null || res2 == null)  // TODO nullable поля
+        if (res1 == null || res2 == null)
             return null
         // return Pair
         return TickerConverter.convert(res1) to QuoteConverter.convert(res2)

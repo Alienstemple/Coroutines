@@ -2,6 +2,7 @@ package com.example.coroutines.domain
 
 import android.content.Context
 import android.util.Log
+import com.example.coroutines.data.converters.TickerOutputConverter
 import com.example.coroutines.models.data.QuoteData
 import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.domain.Quote
@@ -27,17 +28,13 @@ class TickerInteractorImpl(
             }.mapNotNull {
                 Log.d(TAG, "Map not null called")
                 kotlin.runCatching {
-                    Log.d(TAG, "RunCatching called. ${it}")
+                    Log.d(TAG, "RunCatching called. $it")
                     it.await()
                 }.getOrNull()
             }
 
             outputList.map {
-                TickerOutput(it.first?.logo ?: " ",
-                    it.first?.name ?: " ",
-                    it.second?.c ?: 0.0,
-                    it.second?.d ?: 0.0,
-                    it.second?.dp ?: 0.0)  // TODO fix elvis !!
+                TickerOutputConverter.convert(it.first, it.second)
             }
         }
 

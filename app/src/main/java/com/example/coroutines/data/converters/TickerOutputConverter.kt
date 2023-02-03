@@ -1,14 +1,17 @@
 package com.example.coroutines.data.converters
 
-import com.example.coroutines.models.data.TickerQueryData
-import com.example.coroutines.models.domain.TickerQuery
+import com.example.coroutines.models.domain.Quote
+import com.example.coroutines.models.domain.Ticker
+import com.example.coroutines.models.domain.TickerOutput
 
 object TickerOutputConverter {
-    fun convert(tickerData: TickerQueryData): TickerQuery {
-        return TickerQuery(
-            tickerData.Name,
-            tickerData.Sector,
-            tickerData.Symbol
+    fun convert(ticker: Ticker?, quote: Quote?): TickerOutput {
+        return TickerOutput(
+            ticker?.logo,
+            ticker?.name,
+            quote?.c,
+            quote?.d,
+            quote?.dp
         )
     }
 }
