@@ -21,6 +21,7 @@ class TickersAdapter(val itemClickListener: MyItemClickListener): RecyclerView.A
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.ticker_item, parent, false)
 
+        //
         return ViewHolder(view)
     }
 
@@ -38,6 +39,7 @@ class TickersAdapter(val itemClickListener: MyItemClickListener): RecyclerView.A
         notifyDataSetChanged()
     }
 
+    // class ViewHolder(binding: TickerItemBinding): RecyclerView.ViewHolder(binding.root) {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         private val tickerItemBinding = TickerItemBinding.bind(view)

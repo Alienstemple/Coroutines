@@ -6,5 +6,7 @@ import com.example.coroutines.models.domain.TickerOutput
 
 interface TickerInteractor {
     suspend fun getTickersAndQuotes(context: Context): List<TickerOutput>
+
+    // stub
     suspend fun getTickerDetails(tickerOutput: TickerOutput): Ticker
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-
+// stub
 class TickerDetailsViewModel(private val tickerInteractor: TickerInteractor): ViewModel() {
     private val _ticker = MutableLiveData<Ticker>()
     val ticker: LiveData<Ticker> = _ticker

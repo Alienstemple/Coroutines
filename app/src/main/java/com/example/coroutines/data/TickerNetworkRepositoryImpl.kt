@@ -1,5 +1,6 @@
 package com.example.coroutines.data
 
+import android.util.Log
 import com.example.coroutines.data.converters.QuoteConverter
 import com.example.coroutines.data.converters.TickerConverter
 import com.example.coroutines.domain.TickerNetworkRepository
@@ -10,41 +11,28 @@ import com.example.coroutines.models.domain.Ticker
 import com.example.coroutines.models.domain.TickerQuery
 import kotlinx.coroutines.*
 
-class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) : TickerNetworkRepository {
+class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) :
+    TickerNetworkRepository {
 
-    override suspend fun getTickerAndQuote(query: TickerQuery): Pair<Ticker, Quote> =
-        coroutineScope {
-            val res1: TickerData
-            val res2: QuoteData
+    override suspend fun getTickerAndQuote(query: TickerQuery): Pair<Ticker?, Quote?>? {
+        val res1: TickerData?
+        val res2: QuoteData?
 
-//            val call1 = async { kotlin.runCatching { tickerApi.getTicker(query.Symbol)} }
-//            val call2 = async { kotlin.runCatching { tickerApi.getQuote(query.Symbol)} }
-//            res1 = call1.await().getOrDefault(Ticker("", "", "", "", "",
-//            "", 0.0, "Default name", "", 0.0, "Default Ticker", ""))
-//            res2 = call2.await().getOrDefault(Quote(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+        supervisorScope {
+            val call1 = async { tickerApi.getTicker(query.Symbol) }
+            val call2 = async { tickerApi.getQuote(query.Symbol) }
 
-            val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
-                println("Exception thrown in async. $exception")
-            }
-//            FIXME Хм, тем не менее, наше исключение не обрабатывается в `coroutineExceptionHandler` и приложение падает!
-//             Это потому что установка `CoroutineExceptionHandler` в дочерние корутины не имеет никакого эффекта.
-//             Мы должны установить обработчик в _scope_ или в корутину верхнего уровня
-//            val call1 = async(handler) { tickerApi.getTicker(query.Symbol)}
-//            val call2 = async(handler) { tickerApi.getQuote(query.Symbol) }
-
-            val innerScope = CoroutineScope(Job() + handler)
-            val call1 = supervisorScope {  innerScope.async { tickerApi.getTicker(query.Symbol)}}
-            val call2 = supervisorScope {  innerScope.async { tickerApi.getQuote(query.Symbol)}}
-            res1 = call1.await()
-            res2 = call2.await()
-
-            // return Pair
-            TickerConverter.convert(res1) to QuoteConverter.convert(res2)
+            res1 = kotlin.runCatching { call1.await() }.getOrNull()
+            res2 = kotlin.runCatching { call2.await()}.getOrNull()
         }
-    // TODO try runCatching and .onSuccess { Log.d(TAG, "OK") }
-    //                .onFailure { Log.d(TAG, "Catched exception") }
+
+        if (res1 == null || res2 == null)  // TODO nullable поля
+            return null
+        // return Pair
+        return TickerConverter.convert(res1) to QuoteConverter.convert(res2)
+    }
 
     companion object {
-        const val TAG = "InteractLog"
+        const val TAG = "InterFactLog"
     }
 }

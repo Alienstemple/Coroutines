@@ -6,34 +6,47 @@ import com.example.coroutines.models.data.TickerData
 
 class TickerNetworkService(private val retrofitService: RetrofitService) {
 
-    suspend fun getTicker(ticker: String): TickerData {
-        return try {
+    suspend fun getTicker(ticker: String): TickerData? {
+        return try {  // TODO rm
             val response = retrofitService.getTickers(ticker, API_KEY)
 
             if (response.isSuccessful && response.body() != null) {
+
+                val resp: TickerData = response.body()!!  // TODO check if fields are null
+                checkFieldsNotNull(resp)
+
                 response.body()!!  // TODO How to avoid
-            } else {
+            } else { // TODO оставим
                 throw RuntimeException("ERROR GetTicket is unsuccessful. Ticker = $ticker")
             }
         } catch (e: java.lang.Exception) {
             Log.d(TAG, "${e.message}")
-            TickerData("", "", "", "", "",
-                "", 0.0, "Default name", "", 0.0, "Default Ticker", "")
+            null
+//            TickerData("", "", "", "", "",
+//                "", 0.0, "Default name", "", 0.0, "Default Ticker", "")
         }
     }
 
-    suspend fun getQuote(ticker: String): QuoteData {
+    private fun checkFieldsNotNull(resp: TickerData) {
+        if (resp.country == null)   // TODO check if fields are null
+            throw RuntimeException("Field is null!")
+    }
+
+    suspend fun getQuote(ticker: String): QuoteData? {
         return try {
             val response = retrofitService.getQuotes(ticker, API_KEY)
+            val resp: QuoteData
 
             if (response.isSuccessful && response.body() != null) {
-                response.body()!!  // TODO How to avoid
+                resp = response.body()!!
+                return response.body()!!  // TODO How to avoid
             } else {
                 throw RuntimeException("ERROR GetQuote is unsuccessful. Ticker = $ticker")
             }
         } catch (e: java.lang.Exception) {
             Log.d(TAG, "${e.message}")
-            QuoteData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            null
+//            QuoteData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         }
     }
 
