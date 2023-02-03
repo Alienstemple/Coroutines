@@ -12,17 +12,15 @@ import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.databinding.TickerItemBinding
 import com.squareup.picasso.Picasso
 
-class TickersAdapter(val itemClickListener: MyItemClickListener): RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
+class TickersAdapter(private val itemClickListener: MyItemClickListener): RecyclerView.Adapter<TickersAdapter.ViewHolder>() {
 
     private val tickersList = mutableListOf<TickerOutput>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.d(TAG, "onCreateViewHolder() called with: parent = $parent, viewType = $viewType")
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.ticker_item, parent, false)
 
-        //
-        return ViewHolder(view)
+        val binding = TickerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,10 +37,9 @@ class TickersAdapter(val itemClickListener: MyItemClickListener): RecyclerView.A
         notifyDataSetChanged()
     }
 
-    // class ViewHolder(binding: TickerItemBinding): RecyclerView.ViewHolder(binding.root) {
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+     class ViewHolder(binding: TickerItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-        private val tickerItemBinding = TickerItemBinding.bind(view)
+        private val tickerItemBinding = binding
 
         fun bind(tickerItem: TickerOutput, clickListener: MyItemClickListener) = with (tickerItemBinding) {
             Log.d(TAG, "bind() called ${tickerItem.name}")
