@@ -1,6 +1,5 @@
 package com.example.coroutines.data
 
-import android.util.Log
 import com.example.coroutines.data.converters.QuoteConverter
 import com.example.coroutines.data.converters.TickerConverter
 import com.example.coroutines.domain.TickerNetworkRepository
@@ -9,7 +8,8 @@ import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.domain.Quote
 import com.example.coroutines.models.domain.Ticker
 import com.example.coroutines.models.domain.TickerQuery
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.supervisorScope
 
 class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) :
     TickerNetworkRepository {
@@ -23,7 +23,7 @@ class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) :
             val call2 = async { tickerApi.getQuote(query.Symbol) }
 
             res1 = kotlin.runCatching { call1.await() }.getOrNull()
-            res2 = kotlin.runCatching { call2.await()}.getOrNull()
+            res2 = kotlin.runCatching { call2.await() }.getOrNull()
         }
 
         if (res1 == null || res2 == null)

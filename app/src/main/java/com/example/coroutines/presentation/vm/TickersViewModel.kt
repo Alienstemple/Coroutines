@@ -9,11 +9,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.models.domain.TickerOutput
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     ViewModel() {
     private val _tickerList = MutableLiveData<List<TickerOutput>>()
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
+
+    // 1 -- объявим state flow
+    private val _tickerFlow = MutableStateFlow<List<TickerOutput>>(emptyList())
+    val tickerFlow = _tickerFlow.asStateFlow()
 
     fun getTickersAndQuotes(context: Context) {
         val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -26,6 +32,15 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
             val resultList = tickerInteractor.getTickersAndQuotes(context)
             _tickerList.postValue(resultList)
         }
+    }
+
+    // 2 -- отправим значение в state flow
+    fun updateStateFlow() {
+        _tickerFlow.value = listOf(
+            TickerOutput(),
+            TickerOutput(),
+            TickerOutput()
+        )
     }
 
     companion object {

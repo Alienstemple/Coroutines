@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.R
 import com.example.coroutines.data.*
@@ -19,6 +20,9 @@ import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import com.example.coroutines.presentation.vm.TickersViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     private lateinit var mainBinding: ActivityMainBinding
@@ -50,6 +54,14 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
         mainBinding.getRetrofitBtn.setOnClickListener {
 //            showTickerDetails()
             tickersViewModel.getTickersAndQuotes(this.applicationContext)
+
+            // 3 -- collect value of state flow
+//            tickersViewModel.tickerFlow.collect()
+            lifecycleScope.launch {
+                tickersViewModel.tickerFlow.collectLatest {
+
+                }
+            }
         }
     }
 
