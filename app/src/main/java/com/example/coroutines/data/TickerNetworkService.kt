@@ -33,7 +33,7 @@ class TickerNetworkService(private val retrofitService: RetrofitService) {
     }
 
     suspend fun getQuote(ticker: String): QuoteData? {
-//        return try {
+
             val response = retrofitService.getQuotes(ticker, API_KEY)
             val resp: QuoteData
 
@@ -43,11 +43,6 @@ class TickerNetworkService(private val retrofitService: RetrofitService) {
             } else {
                 throw RuntimeException("ERROR GetQuote is unsuccessful. Ticker = $ticker")
             }
-//        } catch (e: java.lang.Exception) {
-//            Log.d(TAG, "${e.message}")
-//            null
-////            QuoteData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-//        }
     }
 
     companion object {

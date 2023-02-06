@@ -6,7 +6,7 @@ import com.example.coroutines.models.domain.Ticker
 object TickerConverter {
     fun convert(tickerData: TickerData?): Ticker? {
         return Ticker(
-            tickerData?.country,
+            country = tickerData?.country,
             tickerData?.currency,
             tickerData?.exchange,
             tickerData?.finnhubIndustry,

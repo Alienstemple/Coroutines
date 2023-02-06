@@ -10,9 +10,21 @@ import com.example.coroutines.databinding.FragmentTickerDetailsBinding
 import com.example.coroutines.presentation.vm.TickerDetailsViewModel
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 
+private const val ARG_PARAM_SYMBOL = "symbol"
+
 class TickerDetailsFragment : Fragment() {
+
+    private var symbol: String? = null
+
     private var _binding: FragmentTickerDetailsBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            symbol = it.getString(ARG_PARAM_SYMBOL)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +45,7 @@ class TickerDetailsFragment : Fragment() {
         setupObserver(tickerDetailsViewModel)
 
         // TODO where to call view model?
-//        tickerDetailsViewModel.getTickerDetails()
+        tickerDetailsViewModel.getTickerDetails(symbol)
 
         binding.closeBtn.setOnClickListener {
             navigator().hideTickerDetails()
@@ -51,7 +63,11 @@ class TickerDetailsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            TickerDetailsFragment()
+        fun newInstance(symbol: String?) =
+            TickerDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM_SYMBOL, symbol)
+                }
+            }
     }
 }

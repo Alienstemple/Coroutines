@@ -1,6 +1,7 @@
 package com.example.coroutines.presentation.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,14 +18,15 @@ class TickerDetailsViewModel(private val tickerInteractor: TickerInteractor): Vi
     private val _ticker = MutableLiveData<Ticker>()
     val ticker: LiveData<Ticker> = _ticker
 
-    fun getTickerDetails(tickerOutput: TickerOutput) {
-        val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
-            println("Exception thrown in one of the children. $exception")
-        }
-        viewModelScope.launch(SupervisorJob() + Dispatchers.IO + handler) {
-            val result = tickerInteractor.getTickerDetails(tickerOutput)
-            _ticker.postValue(result)
-        }
+    fun getTickerDetails(symbol: String?) {
+        Log.d(TAG, "In VM: Get ticker details: $symbol")
+//        val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+//            println("Exception thrown in one of the children. $exception")
+//        }
+//        viewModelScope.launch(SupervisorJob() + Dispatchers.IO + handler) {
+//            val result = tickerInteractor.getTickerDetails(symbol)
+//            _ticker.postValue(result)
+//        }
     }
 
     companion object {

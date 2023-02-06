@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
                 tickersViewModel.tickerFlow.collectLatest {
 
                 }
+
             }
         }
     }
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     override fun showTickerDetails(tickerOutput: TickerOutput) {
         Log.d(TAG, "Item Clicked, in showTickerDetails, ticker = ${tickerOutput.name}")
         mainBinding.detailsFragContainer.visibility = View.VISIBLE
-        launchFragment(TickerDetailsFragment.newInstance())  // TODO pass tickerOutputId!
+        launchFragment(TickerDetailsFragment.newInstance(tickerOutput.symbol))  // TODO pass tickerOutputId!
     }
 
     override fun hideTickerDetails() {
