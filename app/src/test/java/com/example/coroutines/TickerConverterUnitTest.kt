@@ -3,6 +3,7 @@ package com.example.coroutines
 import com.example.coroutines.data.converters.TickerConverter
 import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.domain.Ticker
+import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -43,11 +44,12 @@ class TickerConverterUnitTest {
         val service = mockk<TickerConverter>()
         every { service.convert(tickerDataParam) } returns tickerOutput
 
-        // when
+        // result - actual, tickerOutput - expected
         val result = service.convert((tickerDataParam))
 
         // then
         verify { service.convert(tickerDataParam) }
         Assert.assertEquals(tickerOutput, result)
+        Truth.assertThat(result).isEqualTo(tickerOutput)
     }
 }

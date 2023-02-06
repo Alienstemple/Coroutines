@@ -33,8 +33,11 @@ class TickerViewModelUnitTest {
 
     @Test
     fun test1() {
-//        Mockito.`when`(tickerInteractor.getTickersAndQuotes()).thenReturn()
 
-//        Truth.assertThat().
+
+        // when - что происходит
+
+        // then - проверка
+
     }
 }

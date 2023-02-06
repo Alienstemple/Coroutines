@@ -20,6 +20,7 @@ import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import com.example.coroutines.presentation.vm.TickersViewModel
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,7 +29,8 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
-    private val tickerFileService = TickerFileService()
+    private val mapper = jacksonObjectMapper()
+    private val tickerFileService = TickerFileService(mapper)
     private val tickerNetworkService = TickerNetworkService(RetrofitService.getInstance())
 
     private val tickerRepository = TickerNetworkRepositoryImpl(tickerNetworkService)

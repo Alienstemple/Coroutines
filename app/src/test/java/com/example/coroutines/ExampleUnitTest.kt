@@ -1,15 +1,18 @@
 package com.example.coroutines
 
+import com.example.coroutines.data.RetrofitService
+import com.example.coroutines.data.TickerNetworkService
 import com.example.coroutines.data.converters.TickerConverter
 import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.domain.Ticker
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
+import kotlinx.coroutines.channels.ticker
+import org.junit.After
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Before
 import org.mockito.Mock
 
 /**
@@ -19,51 +22,27 @@ import org.mockito.Mock
  */
 
 class ExampleUnitTest {
-    @Mock
-    val a: String = ""
 
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    //  Протестим TickerNetworkService, понадобится RetrofitService
+    private var retrofitService: RetrofitService = mockk()
+    // Объявим наш TickerNetworkService
+    private lateinit var tickerNetworkService: TickerNetworkService
+
+    @Before
+    fun setup() {
+        // Проинициализируем здесь наш TickerNetworkService
+        tickerNetworkService = TickerNetworkService(retrofitService)
+//        mockkStatic()  // Статику мокаем и очищаем
+    }
+
+    @After
+    fun clean() {
+//        unmockkStatic()
     }
 
     @Test
-    fun tickerConverterMock_whenCallingMockedMethod_thenCorrectlyVerified() {
-        val tickerDataParam = TickerData("country",
-            "currency",
-            "exchange",
-            "finnhubIndustry",
-            "ipo",
-            "logo",
-            0.0,
-            "name",
-            "phone",
-            0.0,
-            "ticker",
-            "weburl")
-
-        val tickerOutput = Ticker("country",
-            "currency",
-            "exchange",
-            "finnhubIndustry",
-            "ipo",
-            "logo",
-            0.0,
-            "name",
-            "phone",
-            0.0,
-            "ticker",
-            "weburl")
-
-        // given
-        val service = mockk<TickerConverter>()
-        every { service.convert(tickerDataParam) } returns tickerOutput
-
-        // when
-        val result = service.convert((tickerDataParam))
-
-        // then
-        verify { service.convert(tickerDataParam) }
-        assertEquals(tickerOutput, result)
+    fun test() {
+        // TODO test coroutines
+//        every { tickerNetworkService.getTicker("test") } returns TickerData()
     }
 }
