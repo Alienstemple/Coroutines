@@ -3,7 +3,6 @@ package com.example.coroutines
 import android.content.Context
 import com.example.coroutines.data.TickerFileRepositoryImpl
 import com.example.coroutines.data.TickerFileService
-import com.example.coroutines.data.TickerNetworkRepositoryImpl
 import com.example.coroutines.domain.TickerFileRepository
 import com.example.coroutines.models.data.TickerQueryData
 import com.example.coroutines.models.domain.TickerQuery
@@ -13,7 +12,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,8 +34,8 @@ class TickerFileRepositoryUnitTest {
     )
 
     private val tickerFileRepositoryOutputList = listOf(
-        TickerQueryData("3M Company", "Industrials", "MMM"),
-        TickerQueryData("A.O. Smith Corp", "Industrials", "AOS")
+        TickerQuery("3M Company", "Industrials", "MMM"),
+        TickerQuery("A.O. Smith Corp", "Industrials", "AOS")
     )
 
     @Before
@@ -55,6 +53,7 @@ class TickerFileRepositoryUnitTest {
         val result = tickerFileRepository.getInputTickers(context)
 
         // then
+        // FIXME  Verification failed: call 2 of 4: List(child of tickerFileService#2#3).size()) was not called
         verify { tickerFileRepository.getInputTickers(context) }
         Truth.assertThat(result).isEqualTo(tickerFileRepositoryOutputList)
     }
