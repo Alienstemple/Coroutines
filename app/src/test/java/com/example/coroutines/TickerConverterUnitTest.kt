@@ -49,7 +49,6 @@ class TickerConverterUnitTest {
 
         // then
         verify { service.convert(tickerDataParam) }
-        Assert.assertEquals(tickerOutput, result)
         Truth.assertThat(result).isEqualTo(tickerOutput)
     }
 }

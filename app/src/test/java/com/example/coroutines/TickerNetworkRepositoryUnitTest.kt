@@ -3,8 +3,6 @@ package com.example.coroutines
 import com.example.coroutines.data.TickerNetworkRepositoryImpl
 import com.example.coroutines.data.TickerNetworkService
 import com.example.coroutines.domain.TickerNetworkRepository
-import com.example.coroutines.models.domain.Quote
-import com.example.coroutines.models.domain.Ticker
 import com.example.coroutines.models.domain.TickerQuery
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
