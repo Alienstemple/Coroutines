@@ -21,7 +21,7 @@ class TickerViewModelUnitTest {
     private val rule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
-    lateinit var tickerInteractor: TickerInteractor  mockk
+    lateinit var tickerInteractor: TickerInteractor
 
     lateinit var tickerViewModel: TickersViewModel
 

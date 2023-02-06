@@ -4,10 +4,7 @@ import com.example.coroutines.models.domain.Quote
 import com.example.coroutines.models.domain.Ticker
 import com.example.coroutines.models.domain.TickerOutput
 
-object TickerOutputConverter {
-
-
-
+class TickerOutputConverter {
     fun convert(ticker: Ticker?, quote: Quote?): TickerOutput {
         return TickerOutput(
             ticker?.logo,

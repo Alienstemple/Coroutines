@@ -34,7 +34,7 @@ class TickerInteractorImpl(
             }
 
             outputList.map {
-                TickerOutputConverter.convert(it.first, it.second)
+                TickerOutputConverter().convert(it.first, it.second)
             }
         }
 

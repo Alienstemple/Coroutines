@@ -3,7 +3,7 @@ package com.example.coroutines.data.converters
 import com.example.coroutines.models.data.QuoteData
 import com.example.coroutines.models.domain.Quote
 
-object QuoteConverter {
+class QuoteConverter {
     fun convert(quoteData: QuoteData?): Quote? {
         return Quote(
             quoteData?.c,

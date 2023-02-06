@@ -29,7 +29,7 @@ class TickerNetworkRepositoryImpl(private val tickerApi: TickerNetworkService) :
         if (res1 == null || res2 == null)
             return null
         // return Pair
-        return TickerConverter.convert(res1) to QuoteConverter.convert(res2)
+        return TickerConverter().convert(res1) to QuoteConverter().convert(res2)
     }
 
     companion object {
