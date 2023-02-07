@@ -16,8 +16,8 @@ class MyParser<T>(private val clazz: Class<T>) {
     fun parseFile(input: String) = parseFile(input, clazz)
 
     fun <T> parseFile(input: String, clazz: Class<T>): T {
-        val file = loadFile(input) ?: throw Exception("Except while reading file") // TODO illegal state ex
-        return objectMapper.readValue(input, clazz)
+        val file = loadFile(input) ?: throw IllegalStateException("Except while reading file") // TODO illegal state ex
+        return objectMapper.readValue(file, clazz)
     }
 
     fun loadFile(file: String): InputStream? { // TODO ? nullable
