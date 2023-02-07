@@ -1,5 +1,8 @@
 package com.example.coroutines.models.domain
 
+/**
+ *
+ */
 data class Ticker(
     val country: String? = "",
     val currency: String? = "",
