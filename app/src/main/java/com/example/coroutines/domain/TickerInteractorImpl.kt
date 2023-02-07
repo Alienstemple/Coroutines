@@ -29,34 +29,34 @@ class TickerInteractorImpl(
                 Log.d(TAG, "In while")
 
                 // Делаем асинхронный запрос
-                val outputForEmit: List<Pair<Ticker, Quote>> = listOf(Pair(Ticker("country",
-                    "currency",
-                    "exchange",
-                    "finnhubIndustry",
-                    "ipo",
-                    "logo",
-                    0.0,
-                    "name",
-                    "phone",
-                    0.0,
-                    "ticker",
-                    "weburl"), Quote(0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0)))
-//                val outputForEmit = inputList.take(20).map {     // take first to avoid network error!
-//                    async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
-//                }.mapNotNull {
-//                    Log.d(TAG, "Map not null called")
-//                    kotlin.runCatching {
-//                        Log.d(TAG, "RunCatching called. $it")
-//                        it.await()
-//                    }.getOrNull()
-//                }
+//                val outputForEmit: List<Pair<Ticker, Quote>> = listOf(Pair(Ticker("country",
+//                    "currency",
+//                    "exchange",
+//                    "finnhubIndustry",
+//                    "ipo",
+//                    "logo",
+//                    0.0,
+//                    "name",
+//                    "phone",
+//                    0.0,
+//                    "ticker",
+//                    "weburl"), Quote(0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0,
+//                    0.0)))
+                val outputForEmit = inputList.take(20).map {     // take first to avoid network error!
+                    async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
+                }.mapNotNull {
+                    Log.d(TAG, "Map not null called")
+                    kotlin.runCatching {
+                        Log.d(TAG, "RunCatching called. $it")
+                        it.await()
+                    }.getOrNull()
+                }
 
                 // emit-им
                 emit(outputForEmit.map {
