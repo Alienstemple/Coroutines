@@ -1,5 +1,6 @@
 package com.example.coroutines.models.data
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class TickerQueryData (
