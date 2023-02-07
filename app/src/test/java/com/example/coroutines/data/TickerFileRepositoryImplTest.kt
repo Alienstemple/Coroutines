@@ -1,6 +1,7 @@
 package com.example.coroutines.data
 
 import android.content.Context
+import com.example.coroutines.data.converters.TickerQueryConverter
 import com.example.coroutines.domain.TickerFileRepository
 import com.example.coroutines.models.data.TickerQueryData
 import com.example.coroutines.models.domain.TickerQuery
@@ -22,8 +23,8 @@ import org.junit.runners.JUnit4
 class TickerFileRepositoryImplTest {
 
     @MockK
-    lateinit var tickerFileService: TickerFileService  // объект-аргумент, передадим в конструктор
-    lateinit var tickerFileRepository: TickerFileRepository  // целевой объект тестирования
+    private lateinit var tickerFileService: TickerFileService  // объект-аргумент, передадим в конструктор
+    private lateinit var tickerFileRepository: TickerFileRepository  // целевой объект тестирования
 
     private val context: Context = mockk()  // нужен для передачи во внутренний метод
 
@@ -57,8 +58,7 @@ class TickerFileRepositoryImplTest {
         val result = tickerFileRepository.getInputTickers(context)
 
         // then
-        // FIXME  Verification failed: call 2 of 4: List(child of tickerFileService#2#3).size()) was not called
-        verify { tickerFileRepository.getInputTickers(context) }
+        verify { tickerFileService.getInputTickers(context) }
         Truth.assertThat(result).isEqualTo(tickerFileRepositoryOutputList)
     }
 }
