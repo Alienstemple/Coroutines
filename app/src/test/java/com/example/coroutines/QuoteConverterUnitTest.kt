@@ -31,15 +31,15 @@ class QuoteConverterUnitTest {
             0.0)
 
         // given
-//        val service = QuoteConverter()   // FIXME error unless mock
-        val service = mockk<QuoteConverter>()
-        every { service.convert(quoteDataParam) } returns quoteOutput
+        val service = QuoteConverter()   // FIXME error unless mock
+//        val service = mockk<QuoteConverter>()
+//        every { service.convert(quoteDataParam) } returns quoteOutput
 
         // result - actual, tickerOutput - expected
         val result = service.convert((quoteDataParam))
 
         // then
-        verify { service.convert(quoteDataParam) }
+//        verify { service.convert(quoteDataParam) }
         Truth.assertThat(result).isEqualTo(quoteOutput)
     }
 }
