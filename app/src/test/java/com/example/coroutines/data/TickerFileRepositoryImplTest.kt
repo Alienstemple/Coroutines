@@ -1,7 +1,6 @@
 package com.example.coroutines.data
 
 import android.content.Context
-import com.example.coroutines.data.converters.TickerQueryConverter
 import com.example.coroutines.domain.TickerFileRepository
 import com.example.coroutines.models.data.TickerQueryData
 import com.example.coroutines.models.domain.TickerQuery
@@ -11,20 +10,23 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.*
-
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
+/**
+ * Класс для тестирования класса - реализации интерфейса TickerFileRepository
+ */
 @RunWith(JUnit4::class)
 class TickerFileRepositoryImplTest {
 
     @MockK
-    private lateinit var tickerFileService: TickerFileService  // объект-аргумент, передадим в конструктор
-    private lateinit var tickerFileRepository: TickerFileRepository  // целевой объект тестирования
+    private lateinit var tickerFileService: TickerFileService
+
+    private lateinit var tickerFileRepository: TickerFileRepository
 
     private val context: Context = mockk()  // нужен для передачи во внутренний метод
 
@@ -49,6 +51,10 @@ class TickerFileRepositoryImplTest {
     fun tearDown() {
     }
 
+    /**
+     * Метод для тестирования полученя списка входных тикеров из файла.
+     * Проверяем, что результат вызова метода репозитория [result] совпадает с ожидаемым [tickerFileRepositoryOutputList]
+     */
     @Test
     fun getInputTickers() {
         // every - заглушка для внутренних методов, в нашем случае - tickerFileService

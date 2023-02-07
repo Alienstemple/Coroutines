@@ -12,15 +12,28 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * ViewModel для хранения списка тикеров и обновления информации о динамике цены
+ * @constructor [tickerInteractor] Экземпляр интерактора, реализующий бизнес-логику
+ */
 class TickersViewModel(private val tickerInteractor: TickerInteractor) :
     ViewModel() {
     private val _tickerList = MutableLiveData<List<TickerOutput>>()
+
+    /**
+     * Список тикеров, хранит динамически обновляемые значения с помощью LiveData
+     */
     val tickerList: LiveData<List<TickerOutput>> = _tickerList
 
     // 1 -- объявим state flow
     private val _tickerFlow = MutableStateFlow<List<TickerOutput>>(emptyList())
     val tickerFlow = _tickerFlow.asStateFlow()
 
+    /**
+     * Метод, асинхронно вызывающий интерактор для получения информации о тикерах из сети
+     * @param context Контекст MainActivity. Понадобится для чтения входного списка компаний из файла
+     * Корутина верхнего уровня запускается в [viewModelScope], обработчик исключений [handler]
+     */
     fun getTickersAndQuotes(context: Context) {
         val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
             println("Exception thrown in one of the children. $exception")
