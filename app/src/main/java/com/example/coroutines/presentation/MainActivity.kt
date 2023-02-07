@@ -55,16 +55,17 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
 
         mainBinding.getRetrofitBtn.setOnClickListener {
 //            showTickerDetails()
-            tickersViewModel.getTickersAndQuotes(this.applicationContext)
+//            tickersViewModel.getTickersAndQuotes(this.applicationContext) // old
+            tickersViewModel.getTickersAndQuotesAsFlow(this.applicationContext)
 
-            // 3 -- collect value of state flow
+            // TODO remove
 //            tickersViewModel.tickerFlow.collect()
-            lifecycleScope.launch {
-                tickersViewModel.tickerFlow.collectLatest {
-
-                }
-
-            }
+//            lifecycleScope.launch {
+//                tickersViewModel.tickerFlow.collectLatest {
+//
+//                }
+//
+//            }
         }
     }
 

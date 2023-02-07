@@ -8,19 +8,72 @@ import com.example.coroutines.models.data.TickerData
 import com.example.coroutines.models.domain.Quote
 import com.example.coroutines.models.domain.Ticker
 import com.example.coroutines.models.domain.TickerOutput
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.supervisorScope
+import com.example.coroutines.models.domain.TickerQuery
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class TickerInteractorImpl(
     private val tickerNetworkRepository: TickerNetworkRepository,
     private val tickerFileRepository: TickerFileRepository,
 ) : TickerInteractor {
 
+    override suspend fun getTickersAndQuotesAsFlow(context: Context): Flow<List<TickerOutput>> = supervisorScope {
+        Log.d(TAG, "Interactor method getTickersAndQuotesAsFlow called")
+        val inputList = tickerFileRepository.getInputTickers(context)
+
+        val tickerFlow: Flow<List<TickerOutput>> = flow {
+
+            while (inputList.isNotEmpty()) {
+                Log.d(TAG, "In while")
+
+                // Делаем асинхронный запрос
+                val outputForEmit: List<Pair<Ticker, Quote>> = listOf(Pair(Ticker("country",
+                    "currency",
+                    "exchange",
+                    "finnhubIndustry",
+                    "ipo",
+                    "logo",
+                    0.0,
+                    "name",
+                    "phone",
+                    0.0,
+                    "ticker",
+                    "weburl"), Quote(0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0)))
+//                val outputForEmit = inputList.take(20).map {     // take first to avoid network error!
+//                    async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
+//                }.mapNotNull {
+//                    Log.d(TAG, "Map not null called")
+//                    kotlin.runCatching {
+//                        Log.d(TAG, "RunCatching called. $it")
+//                        it.await()
+//                    }.getOrNull()
+//                }
+
+                // emit-им
+                emit(outputForEmit.map {
+                    TickerOutputConverter().convert(it.first, it.second)
+                }).also {
+                    inputList.drop(20)
+                }
+                delay(5000)
+            }
+        }.flowOn(Dispatchers.IO)
+
+        return@supervisorScope tickerFlow
+    }
+
     override suspend fun getTickersAndQuotes(context: Context): List<TickerOutput> =
         supervisorScope {
-            Log.d(TAG, "Test interact method called")
+            Log.d(TAG, "Interactor method getTickersAndQuotes called")
             val inputList = tickerFileRepository.getInputTickers(context)
 
             val outputList = inputList.map {     // take first to avoid network error!
