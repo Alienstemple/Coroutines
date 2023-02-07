@@ -1,20 +1,18 @@
-package com.example.coroutines
+package com.example.coroutines.data
 
-import com.example.coroutines.data.TickerNetworkRepositoryImpl
-import com.example.coroutines.data.TickerNetworkService
 import com.example.coroutines.domain.TickerNetworkRepository
 import com.example.coroutines.models.domain.TickerQuery
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.*
+
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@RunWith(JUnit4::class)
-class TickerNetworkRepositoryUnitTest {
+class TickerNetworkRepositoryImplTest {
 
     @MockK
     lateinit var tickerApi: TickerNetworkService
@@ -30,8 +28,12 @@ class TickerNetworkRepositoryUnitTest {
         this.tickerNetworkRepository = TickerNetworkRepositoryImpl(tickerApi)
     }
 
+    @After
+    fun tearDown() {
+    }
+
     @Test
-    fun testExecute_Positive() = runBlocking {
+    fun getTickerAndQuote() = runBlocking {
         // Эмулируем вызов внутренних методов
         coEvery { /*tickerApi.getTicker(Symbol), getQuote*/ } // returns
 

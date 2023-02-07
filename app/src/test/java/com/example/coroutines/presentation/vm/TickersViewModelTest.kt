@@ -1,22 +1,18 @@
-package com.example.coroutines
+package com.example.coroutines.presentation.vm
 
 import com.example.coroutines.domain.TickerInteractor
-import com.example.coroutines.presentation.vm.TickersViewModel
-import com.google.common.truth.Truth
+import org.junit.Assert.*
+
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.junit.MockitoRule
 
-@RunWith(MockitoJUnitRunner::class)
-class TickerViewModelUnitTest {
+class TickersViewModelTest {
     @Rule
     private val rule: MockitoRule = MockitoJUnit.rule()
 
@@ -32,12 +28,6 @@ class TickerViewModelUnitTest {
     }
 
     @Test
-    fun test1() {
-
-
-        // when - что происходит
-
-        // then - проверка
-
+    fun getTickersAndQuotes() {
     }
 }
