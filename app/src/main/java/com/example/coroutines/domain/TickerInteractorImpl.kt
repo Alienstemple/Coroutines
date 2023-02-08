@@ -48,25 +48,20 @@ class TickerInteractorImpl(
 //                    0.0,
 //                    0.0,
 //                    0.0)))
-                val outputForEmit = inputList.take(20).map {     // take first to avoid network error!
-                    async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
-                }.mapNotNull {
-                    Log.d(TAG, "Map not null called")
-                    kotlin.runCatching {
-                        Log.d(TAG, "RunCatching called. $it")
-                        it.await()
-                    }.getOrNull()
+                val outputForEmit = inputList.take(20).mapNotNull {     // take first to avoid network error!
+                    Log.d(TAG, "Before calling repo method") // TODO coro можно ли запустить?
+                    tickerNetworkRepository.getTickerAndQuote(it)   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)
                 }
 
                 // emit-им
                 emit(outputForEmit.map {
                     TickerOutputConverter().convert(it.first, it.second)
                 }).also {
-                    inputList.drop(20)
+                    inputList.drop(20)  // TODO var, result init
                 }
                 delay(5000)
             }
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)  // TODO pass
 
         return@supervisorScope tickerFlow
     }

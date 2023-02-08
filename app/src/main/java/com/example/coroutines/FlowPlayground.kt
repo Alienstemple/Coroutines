@@ -2,8 +2,7 @@ package com.example.coroutines
 
 import com.example.coroutines.data.converters.TickerQueryConverter
 import com.example.coroutines.models.domain.TickerQuery
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.junit.Test
@@ -25,6 +24,7 @@ class FlowPlayground {
         )
         val testFlow = flow {
             while (true) {
+                CoroutineScope(Dispatchers.IO)
                 emit(getModels(input.take(2))).also {
                     input.drop(2)
                 }

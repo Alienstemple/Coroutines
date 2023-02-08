@@ -56,7 +56,7 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
                 "Exception thrown in one of the children. $exception",
                 Toast.LENGTH_SHORT).show()
         }
-        viewModelScope.launch(SupervisorJob() + Dispatchers.IO + handler) {
+        viewModelScope.launch(handler) {
             val resultListFlow = tickerInteractor.getTickersAndQuotesAsFlow(context)
             resultListFlow.collect {
                 Log.d(TAG, "Result list = $it")
@@ -74,6 +74,12 @@ class TickersViewModel(private val tickerInteractor: TickerInteractor) :
             TickerOutput()
         )
     }
+
+    /*.stateIn(
+        scope = viewModelScope,
+        started = WhileSubscribed(5000), // Or Lazily because it's a one-shot // TODO onDestroy
+        initialValue = Result.Loading
+    )*/
 
     companion object {
         const val TAG = "VMLog"
