@@ -4,6 +4,6 @@ public class Main {
     public static void main(String args[])  //static method
     {
         System.out.println("Static method");
-        TestJavaComponent testJavaComponent = DaggerTestJavaComponent.create();
+//        TestJavaComponent testJavaComponent = DaggerTestJavaComponent.create();
     }
 }

@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.R
-import com.example.coroutines.dagger.TestComponent
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractor
@@ -48,6 +47,9 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
 
         // Init adapter for recycler
         initAdapter()
+
+        // TODO unresolved reference
+//        val cmp = DaggerTestComponent.create()
 
         // Init observer
         setupObserver(tickersViewModel)

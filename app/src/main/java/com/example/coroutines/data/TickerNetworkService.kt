@@ -3,8 +3,9 @@ package com.example.coroutines.data
 import android.util.Log
 import com.example.coroutines.models.data.QuoteData
 import com.example.coroutines.models.data.TickerData
+import javax.inject.Inject
 
-class TickerNetworkService(private val retrofitService: RetrofitService) {
+class TickerNetworkService constructor(private val retrofitService: RetrofitService) {
 
     suspend fun getTicker(ticker: String): TickerData? {
 //        return try {  // TODO rm

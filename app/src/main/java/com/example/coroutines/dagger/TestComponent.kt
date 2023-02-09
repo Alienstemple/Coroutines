@@ -5,5 +5,4 @@ import dagger.Component
 
 @Component
 interface TestComponent {
-    fun inject(mainActivity: MainActivity)
 }
