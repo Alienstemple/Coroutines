@@ -1,18 +1,16 @@
 package com.example.coroutines.presentation
 
-import android.opengl.Visibility
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.R
+import com.example.coroutines.dagger.DaggerTestComponent
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractor
@@ -35,11 +33,12 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     private val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
     private val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
+
+        val component = DaggerTestComponent.create()  // kotlin works
 
         val tickersViewModel: TickersViewModel =
             ViewModelProvider(this,
@@ -47,9 +46,6 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
 
         // Init adapter for recycler
         initAdapter()
-
-        // TODO unresolved reference
-//        val cmp = DaggerTestComponent.create()
 
         // Init observer
         setupObserver(tickersViewModel)
