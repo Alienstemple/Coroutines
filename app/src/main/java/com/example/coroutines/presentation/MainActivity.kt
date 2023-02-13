@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutines.R
-import com.example.coroutines.dagger.DaggerTestComponent
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
 import com.example.coroutines.domain.TickerInteractor
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-        val component = DaggerTestComponent.create()  // kotlin works
+
 
         val tickersViewModel: TickersViewModel =
             ViewModelProvider(this,
