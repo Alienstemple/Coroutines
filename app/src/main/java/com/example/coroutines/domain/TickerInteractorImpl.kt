@@ -13,8 +13,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class TickerInteractorImpl(
+class TickerInteractorImpl @Inject constructor(
     private val tickerNetworkRepository: TickerNetworkRepository,
     private val tickerFileRepository: TickerFileRepository,
 ) : TickerInteractor {

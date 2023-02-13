@@ -5,7 +5,7 @@ import com.example.coroutines.presentation.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 
-@Component
+@Component(modules = [InteractorModule::class])
 interface AppComponent {
     @Component.Factory
     interface Factory {
