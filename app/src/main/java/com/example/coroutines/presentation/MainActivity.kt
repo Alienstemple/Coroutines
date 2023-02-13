@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
         setContentView(mainBinding.root)
 
         // FIXME MyApplication class cast except
-//        (application as MyApplication).appComponent.inject(this)
+        (application as MyApplication).appComponent.inject(this)
 
-        val component = DaggerAppComponent.factory().create(jacksonObjectMapper(), RetrofitService.getInstance())
-        component.inject(this)
+//        val component = DaggerAppComponent.factory().create(jacksonObjectMapper(), RetrofitService.getInstance())
+//        component.inject(this)
 
         Log.d(TAG, "Dagger initialized VM $tickersViewModel")
 
