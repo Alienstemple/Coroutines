@@ -14,13 +14,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * ViewModel для хранения списка тикеров и обновления информации о динамике цены
  * @constructor [tickerInteractor] Экземпляр интерактора, реализующий бизнес-логику
  */
+@Singleton
 class TickersViewModel @Inject constructor(private val tickerInteractor: TickerInteractor) :
     ViewModel() {
+
+    init {
+        Log.d("TAG", "Dagger initialized Interactor $tickerInteractor")
+    }
+
     private val _tickerList = MutableLiveData<List<TickerOutput>>()
 
     /**

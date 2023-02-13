@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
         val component = DaggerAppComponent.factory().create(jacksonObjectMapper(), RetrofitService.getInstance())
         component.inject(this)
 
+        Log.d(TAG, "Dagger initialized VM $tickersViewModel")
+
         // Dagger replaces this
 //        val tickersViewModel: TickersViewModel =
 //            ViewModelProvider(this,
