@@ -6,7 +6,7 @@ import dagger.Binds
 import dagger.Module
 
 @Module
-abstract class NetworkModule {
+abstract class NetworkRepoModule {
     @Binds
-    abstract fun provideStorage(tickerNetworkRepository: TickerNetworkRepositoryImpl): TickerNetworkRepository
+    abstract fun provideNetworkRepository(tickerNetworkRepository: TickerNetworkRepositoryImpl): TickerNetworkRepository
 }

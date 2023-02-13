@@ -37,15 +37,15 @@ class TickerDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tickerInteractor = navigator().getTickerInteractor()
-        val tickerDetailsViewModel: TickerDetailsViewModel =
-            ViewModelProvider(this,
-                TickerViewModelFactory(tickerInteractor))[TickerDetailsViewModel::class.java]
+//        val tickerInteractor = navigator().getTickerInteractor()
+//        val tickerDetailsViewModel: TickerDetailsViewModel =
+//            ViewModelProvider(this,
+//                TickerViewModelFactory(tickerInteractor))[TickerDetailsViewModel::class.java]
 
-        setupObserver(tickerDetailsViewModel)
+//        setupObserver(tickerDetailsViewModel)
 
         // TODO where to call view model?
-        tickerDetailsViewModel.getTickerDetails(symbol)
+//        tickerDetailsViewModel.getTickerDetails(symbol)
 
         binding.closeBtn.setOnClickListener {
             navigator().hideTickerDetails()

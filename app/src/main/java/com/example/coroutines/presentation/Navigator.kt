@@ -11,5 +11,5 @@ fun Fragment.navigator(): Navigator {
 interface Navigator {
     fun showTickerDetails(tickerOutput: TickerOutput)
     fun hideTickerDetails()
-    fun getTickerInteractor(): TickerInteractor
+//    fun getTickerInteractor(): TickerInteractor
 }

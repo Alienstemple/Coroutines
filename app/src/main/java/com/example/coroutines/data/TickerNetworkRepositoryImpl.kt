@@ -12,7 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 
-class TickerNetworkRepositoryImpl constructor(private val tickerApi: TickerNetworkService) :
+class TickerNetworkRepositoryImpl @Inject constructor(private val tickerApi: TickerNetworkService) :
     TickerNetworkRepository {
 
     override suspend fun getTickerAndQuote(query: TickerQuery): Pair<Ticker?, Quote?>? {

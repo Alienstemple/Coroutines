@@ -1,47 +1,55 @@
 package com.example.coroutines.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coroutines.MyApplication
 import com.example.coroutines.R
+import com.example.coroutines.dagger.DaggerAppComponent
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
-import com.example.coroutines.domain.TickerInteractor
-import com.example.coroutines.domain.TickerInteractorImpl
 import com.example.coroutines.models.domain.TickerOutput
-import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import com.example.coroutines.presentation.vm.TickersViewModel
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var tickerAdapter: TickersAdapter
 
-    private val mapper = jacksonObjectMapper()
-    private val tickerFileService = TickerFileService(mapper)
-    private val tickerNetworkService = TickerNetworkService(RetrofitService.getInstance())
+//    private val mapper = jacksonObjectMapper()
+//    private val tickerFileService = TickerFileService(mapper)
+//    private val tickerNetworkService = TickerNetworkService(RetrofitService.getInstance())
+//
+//    private val tickerRepository = TickerNetworkRepositoryImpl(tickerNetworkService)
+//    private val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
+//    private val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
 
-    private val tickerRepository = TickerNetworkRepositoryImpl(tickerNetworkService)
-    private val tickerFileRepository = TickerFileRepositoryImpl(tickerFileService)
-    private val tickerInteractor = TickerInteractorImpl(tickerRepository, tickerFileRepository)
+    @Inject
+    lateinit var tickersViewModel: TickersViewModel
+
+    // TODO inject interactor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
+        // FIXME MyApplication class cast except
+//        (application as MyApplication).appComponent.inject(this)
 
+        val component = DaggerAppComponent.factory().create(jacksonObjectMapper(), RetrofitService.getInstance())
+        component.inject(this)
 
-        val tickersViewModel: TickersViewModel =
-            ViewModelProvider(this,
-                TickerViewModelFactory(tickerInteractor))[TickersViewModel::class.java]
+        // Dagger replaces this
+//        val tickersViewModel: TickersViewModel =
+//            ViewModelProvider(this,
+//                TickerViewModelFactory(tickerInteractor))[TickersViewModel::class.java]
 
         // Init adapter for recycler
         initAdapter()
@@ -96,7 +104,7 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
         removeFragment(TickerDetailsFragment())
     }
 
-    override fun getTickerInteractor(): TickerInteractor = tickerInteractor
+//    override fun getTickerInteractor(): TickerInteractor = tickerInteractor
 
     private fun launchFragment(fragment: Fragment) {
         Log.d(TAG, "Transact with name ${fragment::class.java.simpleName}")
