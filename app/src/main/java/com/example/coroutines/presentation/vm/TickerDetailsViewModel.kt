@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.coroutines.dagger.ActivityScope
 import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.models.domain.Ticker
+import javax.inject.Inject
 
 // stub
-class TickerDetailsViewModel(private val tickerInteractor: TickerInteractor): ViewModel() {
+class TickerDetailsViewModel @Inject constructor(private val tickerInteractor: TickerInteractor): ViewModel() {
     private val _ticker = MutableLiveData<Ticker>()
     val ticker: LiveData<Ticker> = _ticker
 

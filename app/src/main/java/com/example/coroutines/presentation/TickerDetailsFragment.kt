@@ -1,14 +1,17 @@
 package com.example.coroutines.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.coroutines.MyApplication
 import com.example.coroutines.databinding.FragmentTickerDetailsBinding
 import com.example.coroutines.presentation.vm.TickerDetailsViewModel
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
+import javax.inject.Inject
 
 private const val ARG_PARAM_SYMBOL = "symbol"
 
@@ -18,6 +21,9 @@ class TickerDetailsFragment : Fragment() {
 
     private var _binding: FragmentTickerDetailsBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var tickerDetailsViewModel: TickerDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +56,11 @@ class TickerDetailsFragment : Fragment() {
         binding.closeBtn.setOnClickListener {
             navigator().hideTickerDetails()
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        ((activity as MainActivity).application as MyApplication).appComponent.activityComponent().create()
     }
 
     private fun setupObserver(tickerDetailsViewModel: TickerDetailsViewModel) {

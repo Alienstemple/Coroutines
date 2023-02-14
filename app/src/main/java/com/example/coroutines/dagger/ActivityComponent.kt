@@ -1,8 +1,8 @@
 package com.example.coroutines.dagger
 
+import com.example.coroutines.presentation.TickerDetailsFragment
 import dagger.Subcomponent
 
-@ActivityScope
 @Subcomponent
 interface ActivityComponent {
 
@@ -10,4 +10,6 @@ interface ActivityComponent {
     interface Factory {
         fun create(): ActivityComponent
     }
+
+    fun inject(fragment: TickerDetailsFragment)
 }

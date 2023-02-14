@@ -60,7 +60,7 @@ class TickersViewModel @Inject constructor(private val tickerInteractor: TickerI
     fun getTickersAndQuotesAsFlow(context: Context) {
         val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
             println("Exception thrown in one of the children. $exception")
-            Toast.makeText(context,
+            Toast.makeText(context, // TODO rm Toast
                 "Exception thrown in one of the children. $exception",
                 Toast.LENGTH_SHORT).show()
         }
