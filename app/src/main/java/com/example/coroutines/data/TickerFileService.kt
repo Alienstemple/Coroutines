@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import javax.inject.Inject
 
-class TickerFileService @Inject constructor(private val mapper: ObjectMapper) {
+class TickerFileService (private val mapper: ObjectMapper) {
 
     fun getInputTickers(context: Context): List<TickerQueryData> {
         val inputTickers: String = context.resources.openRawResource(R.raw.s_p_tickers)

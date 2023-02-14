@@ -10,7 +10,7 @@ import javax.inject.Inject
  * Класс для получения списка входных моделей Ticker из файла s_p_tickers.json
  * @constructor Принимает на вход [tickerFileService] - сервис для чтения и конвертации json-файла
  */
-class TickerFileRepositoryImpl @Inject constructor(private val tickerFileService: TickerFileService) : TickerFileRepository {
+class TickerFileRepositoryImpl (private val tickerFileService: TickerFileService) : TickerFileRepository {
     /**
      * Метод для получения списка входных моделей Ticker из файла s_p_tickers.json
      * @param context Контекст MainActivity

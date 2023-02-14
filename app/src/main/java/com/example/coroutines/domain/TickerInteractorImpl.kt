@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class TickerInteractorImpl @Inject constructor(
+class TickerInteractorImpl (
     private val tickerNetworkRepository: TickerNetworkRepository,
     private val tickerFileRepository: TickerFileRepository,
 ) : TickerInteractor {
