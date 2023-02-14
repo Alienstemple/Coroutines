@@ -21,9 +21,9 @@ class TickerInteractorImpl (
     private val tickerFileRepository: TickerFileRepository,
 ) : TickerInteractor {
 
-    override suspend fun getTickersAndQuotesAsFlow(context: Context): Flow<List<TickerOutput>> = supervisorScope {
+    override suspend fun getTickersAndQuotesAsFlow(): Flow<List<TickerOutput>> = supervisorScope {
         Log.d(TAG, "Interactor method getTickersAndQuotesAsFlow called")
-        val inputList = tickerFileRepository.getInputTickers(context)
+        val inputList = tickerFileRepository.getInputTickers()
 
         val tickerFlow: Flow<List<TickerOutput>> = flow {
 
@@ -68,10 +68,10 @@ class TickerInteractorImpl (
         return@supervisorScope tickerFlow
     }
 
-    override suspend fun getTickersAndQuotes(context: Context): List<TickerOutput> =
+    override suspend fun getTickersAndQuotes(): List<TickerOutput> =
         supervisorScope {
             Log.d(TAG, "Interactor method getTickersAndQuotes called")
-            val inputList = tickerFileRepository.getInputTickers(context)
+            val inputList = tickerFileRepository.getInputTickers()
 
             val outputList = inputList.map {     // take first to avoid network error!
                 async { tickerNetworkRepository.getTickerAndQuote(it) }   // Нужно, чтобы в случае ошибки сети этот async был просто отменен (cancelled)

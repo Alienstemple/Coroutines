@@ -44,28 +44,22 @@ class TickersViewModel @Inject constructor(private val tickerInteractor: TickerI
      * @param context Контекст MainActivity. Понадобится для чтения входного списка компаний из файла
      * Корутина верхнего уровня запускается в [viewModelScope], обработчик исключений [handler]
      */
-    fun getTickersAndQuotes(context: Context) {
+    fun getTickersAndQuotes() {
         val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
             println("Exception thrown in one of the children. $exception")
-            Toast.makeText(context,
-                "Exception thrown in one of the children. $exception",
-                Toast.LENGTH_SHORT).show()
         }
         viewModelScope.launch(SupervisorJob() + Dispatchers.IO + handler) {
-            val resultList = tickerInteractor.getTickersAndQuotes(context)
+            val resultList = tickerInteractor.getTickersAndQuotes()
             _tickerList.postValue(resultList)
         }
     }
 
-    fun getTickersAndQuotesAsFlow(context: Context) {
+    fun getTickersAndQuotesAsFlow() {
         val handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
             println("Exception thrown in one of the children. $exception")
-            Toast.makeText(context, // TODO rm Toast
-                "Exception thrown in one of the children. $exception",
-                Toast.LENGTH_SHORT).show()
         }
         viewModelScope.launch(handler) {
-            val resultListFlow = tickerInteractor.getTickersAndQuotesAsFlow(context)
+            val resultListFlow = tickerInteractor.getTickersAndQuotesAsFlow()
             resultListFlow.collect {
                 Log.d(TAG, "Result list = $it")
             }

@@ -4,5 +4,5 @@ import android.content.Context
 import com.example.coroutines.models.domain.TickerQuery
 
 interface TickerFileRepository {
-    fun getInputTickers(context: Context): List<TickerQuery>
+    fun getInputTickers(): List<TickerQuery>
 }

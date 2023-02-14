@@ -1,5 +1,7 @@
 package com.example.coroutines.dagger
 
+import android.content.Context
+import android.util.Log
 import com.example.coroutines.data.*
 import com.example.coroutines.domain.TickerFileRepository
 import com.example.coroutines.domain.TickerInteractor
@@ -15,7 +17,7 @@ import javax.inject.Singleton
 class GeneralModule {
 
     val mapper: ObjectMapper = jacksonObjectMapper()
-    val apiClient = RetrofitService.getInstance()
+    val apiClient: RetrofitService = RetrofitService.getInstance()
 
     @Provides
     @Singleton
@@ -25,8 +27,8 @@ class GeneralModule {
 
     @Provides
     @Singleton
-    fun providesTickerFileService(): TickerFileService {
-        return TickerFileService(mapper)
+    fun providesTickerFileService(context: Context): TickerFileService {
+        return TickerFileService(mapper, context)
     }
 
     @Provides

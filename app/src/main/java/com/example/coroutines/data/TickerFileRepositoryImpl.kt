@@ -16,8 +16,8 @@ class TickerFileRepositoryImpl (private val tickerFileService: TickerFileService
      * @param context Контекст MainActivity
      * @return Список моделей для сетевого запроса List<TickerQuery>
      */
-    override fun getInputTickers(context: Context): List<TickerQuery> {
-        val inputTickersData = tickerFileService.getInputTickers(context)
+    override fun getInputTickers(): List<TickerQuery> {
+        val inputTickersData = tickerFileService.getInputTickers()
         return inputTickersData.map { TickerQueryConverter().convert(it) }
     }
 }
