@@ -12,6 +12,7 @@ import com.example.coroutines.R
 import com.example.coroutines.dagger.DaggerAppComponent
 import com.example.coroutines.data.*
 import com.example.coroutines.databinding.ActivityMainBinding
+import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.models.domain.TickerOutput
 import com.example.coroutines.presentation.vm.TickersViewModel
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -34,24 +35,17 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
     lateinit var tickersViewModel: TickersViewModel
 
     // TODO inject interactor
+    @Inject
+    lateinit var tickerInteractor: TickerInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-        // FIXME MyApplication class cast except
         (application as MyApplication).appComponent.inject(this)
 
-//        val component = DaggerAppComponent.factory().create(jacksonObjectMapper(), RetrofitService.getInstance())
-//        component.inject(this)
-
         Log.d(TAG, "Dagger initialized VM $tickersViewModel")
-
-        // Dagger replaces this
-//        val tickersViewModel: TickersViewModel =
-//            ViewModelProvider(this,
-//                TickerViewModelFactory(tickerInteractor))[TickersViewModel::class.java]
 
         // Init adapter for recycler
         initAdapter()
@@ -105,8 +99,6 @@ class MainActivity : AppCompatActivity(), Navigator, MyItemClickListener {
         mainBinding.detailsFragContainer.visibility = View.GONE
         removeFragment(TickerDetailsFragment())
     }
-
-//    override fun getTickerInteractor(): TickerInteractor = tickerInteractor
 
     private fun launchFragment(fragment: Fragment) {
         Log.d(TAG, "Transact with name ${fragment::class.java.simpleName}")

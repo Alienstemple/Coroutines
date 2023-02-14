@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.coroutines.MyApplication
 import com.example.coroutines.databinding.FragmentTickerDetailsBinding
+import com.example.coroutines.domain.TickerInteractor
 import com.example.coroutines.presentation.vm.TickerDetailsViewModel
 import com.example.coroutines.presentation.vm.TickerViewModelFactory
 import javax.inject.Inject
@@ -43,15 +44,10 @@ class TickerDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val tickerInteractor = navigator().getTickerInteractor()
-//        val tickerDetailsViewModel: TickerDetailsViewModel =
-//            ViewModelProvider(this,
-//                TickerViewModelFactory(tickerInteractor))[TickerDetailsViewModel::class.java]
-
-//        setupObserver(tickerDetailsViewModel)
+        setupObserver(tickerDetailsViewModel)
 
         // TODO where to call view model?
-//        tickerDetailsViewModel.getTickerDetails(symbol)
+        tickerDetailsViewModel.getTickerDetails(symbol)
 
         binding.closeBtn.setOnClickListener {
             navigator().hideTickerDetails()
