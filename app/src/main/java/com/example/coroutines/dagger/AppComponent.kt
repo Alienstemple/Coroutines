@@ -14,8 +14,7 @@ import javax.inject.Singleton
 interface AppComponent {
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance  mapper: ObjectMapper,
-                   @BindsInstance  tickerApi: RetrofitService): AppComponent
+        fun create(): AppComponent
     }
 
     fun activityComponent(): ActivityComponent.Factory

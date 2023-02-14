@@ -9,6 +9,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 open class MyApplication : Application() {
 
     val appComponent: AppComponent by lazy {
-        DaggerAppComponent.factory().create(jacksonObjectMapper(), RetrofitService.getInstance())
+        DaggerAppComponent.factory().create()
     }
 }
